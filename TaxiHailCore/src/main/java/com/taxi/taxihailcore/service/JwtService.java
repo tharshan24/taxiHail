@@ -1,5 +1,6 @@
-package com.taxi.taxihailcore.utils;
+package com.taxi.taxihailcore.service;
 
+import com.taxi.taxihailcore.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -7,23 +8,36 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
+import org.springframework.security.crypto.codec.Hex;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Service
 public class JwtService {
 
-    @Value("${env.jwt.SECRET_KEY}")
-    private static String SECRET_KEY;
+    @Value("${application.security.jwt.secret-key}")
+    private String secretKey;
+    @Value("${application.security.jwt.expiration}")
+    private long jwtExpiration;
+    @Value("${application.security.jwt.refresh-token.expiration}")
+    private long refreshExpiration;
 
     public String extractUserName(String jwt) {
         return extractClaim(jwt, Claims::getSubject);
+    }
+
+    public UUID extractUserId(String jwt) {
+        return extractClaim(jwt, claims -> claims.get("userId", UUID.class));
+    }
+
+    public String extractUserRole(String jwt) {
+        return extractClaim(jwt, claims -> claims.get("role", String.class));
     }
 
     public <T> T extractClaim(String jwt, Function<Claims, T> claimsResolver) {
@@ -31,21 +45,43 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateToken(User user) {
+        return generateToken(new HashMap<>(), user);
     }
 
     public String generateToken(
             Map<String, Object> extraClaims,
-            UserDetails userDetails
+            User user
     ) {
+        return buildToken(extraClaims, user, jwtExpiration);
+    }
+
+    public String generateRefreshToken(
+            User user
+    ) {
+        return buildToken(new HashMap<>(), user, refreshExpiration);
+    }
+
+    public String buildToken(
+            Map<String, Object> extraClaims,
+            User user,
+            long expiration
+    ) {
+        UUID userId = user.getUserId();
+        String role = String.valueOf(user.getRole());
+
+        // Add the extra claims to the existing claims
+        Map<String, Object> claims = new HashMap<>(extraClaims);
+        claims.put("userId", userId);
+        claims.put("role", role);
+
         return Jwts
                 .builder()
-                .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .setClaims(claims)
+                .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration((new Date(System.currentTimeMillis()+ 1000 * 60 * 24)))
-                .signWith(getSigningKey(), SignatureAlgorithm.ES256)
+                .setExpiration((new Date(System.currentTimeMillis()+ expiration)))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -67,12 +103,12 @@ public class JwtService {
                 .parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
-                .parseClaimsJwt(jwt)
+                .parseClaimsJws(jwt)
                 .getBody();
     }
 
     private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

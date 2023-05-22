@@ -1,7 +1,6 @@
 package com.taxi.taxihailcore.service;
 
 import com.taxi.taxihailcore.repository.PaymentModeRepository;
-import com.taxi.taxihailcore.repository.PaymentModeRepository;
 import org.springframework.stereotype.Service;
 
 @Service

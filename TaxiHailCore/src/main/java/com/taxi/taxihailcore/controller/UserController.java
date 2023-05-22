@@ -1,11 +1,13 @@
 package com.taxi.taxihailcore.controller;
 
 import com.taxi.taxihailcore.service.UserService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
@@ -13,4 +15,10 @@ public class UserController {
     public UserController(UserService userService){
         this.userService = userService;
     }
+
+    @GetMapping("/test")
+    public ResponseEntity<String> test() {
+        return ResponseEntity.ok("Test ok");
+    }
+
 }

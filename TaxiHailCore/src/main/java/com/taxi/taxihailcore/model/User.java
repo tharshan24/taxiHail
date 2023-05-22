@@ -42,7 +42,7 @@ public class User implements UserDetails {
     private String salt;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", length = 1, unique = false, nullable = false, updatable = false)
+    @Column(name = "role", length = 12, unique = false, nullable = false, updatable = false)
     private Role role;
 
     @Column(name = "username", length = 32, unique = true, nullable = false, updatable = false)
@@ -81,6 +81,9 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
     private List<Ride> driverRides;
+
+    @OneToMany(mappedBy = "authUser")
+    private List<Token> tokens;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

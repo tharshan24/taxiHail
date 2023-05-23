@@ -1,5 +1,6 @@
 package com.taxi.taxihailcore.service;
 
+import com.taxi.taxihailcore.auth.AuthenticationResponse;
 import com.taxi.taxihailcore.repository.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,7 +16,7 @@ public class LogoutService implements LogoutServiceInterface {
     private final TokenRepository tokenRepository;
 
     @Override
-    public void logout(
+    public AuthenticationResponse logout(
             HttpServletRequest request,
             HttpServletResponse response,
             Authentication authentication
@@ -23,7 +24,12 @@ public class LogoutService implements LogoutServiceInterface {
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-            return;
+            return AuthenticationResponse.builder()
+                    .accessToken(null)
+                    .refreshToken(null)
+                    .status(1)
+                    .message("Logout Unsuccessful")
+                    .build();
         }
         jwt = authHeader.substring(7);
         var storedToken = tokenRepository.findByToken(jwt)
@@ -34,6 +40,11 @@ public class LogoutService implements LogoutServiceInterface {
             tokenRepository.save(storedToken);
             SecurityContextHolder.clearContext();
         }
+        return AuthenticationResponse.builder()
+                .accessToken(null)
+                .refreshToken(null)
+                .status(0)
+                .message("Logout Successful")
+                .build();
     }
-
 }

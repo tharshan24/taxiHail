@@ -11,6 +11,7 @@ import com.taxi.taxihailcore.service.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +46,6 @@ public class AuthenticationService {
                 .role(Role.valueOf(request.getRole()))
                 .status(1)
                 .build();
-            userRepository.save(user);
 
             var savedUser = userRepository.save(user);
             var jwtToken = jwtService.generateToken(user);
@@ -66,7 +68,7 @@ public class AuthenticationService {
 
     }
 
-    public AuthenticationResponse authenticate(RegisterRequest request) {
+    public AuthenticationResponse authenticate(@NotNull RegisterRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
@@ -74,11 +76,14 @@ public class AuthenticationService {
                 )
         );
 
-        var user = userRepository.findByUserName(request.getUsername()).orElseThrow();
+        var user = userRepository.findByUserNameAndStatus(request.getUsername(), 1).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
+
+        user.setLastLogin(Timestamp.from(Instant.now()));
+        userRepository.save(user);
 
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
@@ -99,7 +104,7 @@ public class AuthenticationService {
         tokenRepository.save(token);
     }
 
-    private void revokeAllUserTokens(User user) {
+    private void revokeAllUserTokens(@NotNull User user) {
         var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getUserId());
         if (validUserTokens.isEmpty())
             return;
@@ -111,7 +116,7 @@ public class AuthenticationService {
     }
 
     public void refreshToken(
-            HttpServletRequest request,
+            @NotNull HttpServletRequest request,
             HttpServletResponse response
     ) throws IOException {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -123,7 +128,7 @@ public class AuthenticationService {
         refreshToken = authHeader.substring(7);
         userName = jwtService.extractUserName(refreshToken);
         if (userName != null) {
-            var user = this.userRepository.findByUserName(userName)
+            var user = this.userRepository.findByUserNameAndStatus(userName, 1)
                     .orElseThrow();
             if (jwtService.isTokenValid(refreshToken, user)) {
                 var accessToken = jwtService.generateToken(user);

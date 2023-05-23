@@ -1,27 +1,29 @@
-package com.taxi.taxihailcore.auth;
+package com.taxi.taxihailcore.dto;
 
+import com.taxi.taxihailcore.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.UUID;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
-    private String username;
+public class UserDTO {
+    private UUID userId;
+    private String userName;
     private String email;
-    private String password;
-    private String passwordConfirm;
     private String firstName;
     private String lastName;
     private String mobile;
-    private String role;
+    private Role role;
     private int status;
-    private Instant lastLogin;
+    private Timestamp lastLogin;
     private Instant createdAt;
     private Instant updatedAt;
 }

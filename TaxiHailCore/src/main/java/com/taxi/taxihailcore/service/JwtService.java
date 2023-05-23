@@ -1,11 +1,13 @@
 package com.taxi.taxihailcore.service;
 
+import com.taxi.taxihailcore.model.Role;
 import com.taxi.taxihailcore.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.codec.Hex;
@@ -32,15 +34,15 @@ public class JwtService {
         return extractClaim(jwt, Claims::getSubject);
     }
 
-    public UUID extractUserId(String jwt) {
-        return extractClaim(jwt, claims -> claims.get("userId", UUID.class));
+    public String extractUserId(String jwt) {
+        return extractClaim(jwt, claims -> claims.get("userId", String.class));
     }
 
     public String extractUserRole(String jwt) {
         return extractClaim(jwt, claims -> claims.get("role", String.class));
     }
 
-    public <T> T extractClaim(String jwt, Function<Claims, T> claimsResolver) {
+    public <T> T extractClaim(String jwt, @NotNull Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(jwt);
         return claimsResolver.apply(claims);
     }
@@ -64,11 +66,11 @@ public class JwtService {
 
     public String buildToken(
             Map<String, Object> extraClaims,
-            User user,
+            @NotNull User user,
             long expiration
     ) {
         UUID userId = user.getUserId();
-        String role = String.valueOf(user.getRole());
+        Role role = user.getRole();
 
         // Add the extra claims to the existing claims
         Map<String, Object> claims = new HashMap<>(extraClaims);
@@ -85,7 +87,7 @@ public class JwtService {
                 .compact();
     }
 
-    public boolean isTokenValid(String jwt, UserDetails userDetails) {
+    public boolean isTokenValid(String jwt, @NotNull UserDetails userDetails) {
         final String username = extractUserName(jwt);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(jwt);
     }

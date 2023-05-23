@@ -1,11 +1,10 @@
 package com.taxi.taxihailcore.auth;
 
-import com.taxi.taxihailcore.service.LogoutService;
+import com.taxi.taxihailcore.dto.RegisterRequestDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -17,7 +16,7 @@ public class Auth {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register (@RequestBody RegisterRequest request) {
+    public ResponseEntity<AuthenticationResponse> register (@RequestBody RegisterRequestDTO request) {
             if(!request.getPassword().equals(request.getPasswordConfirm())) {
                 return ResponseEntity.ok(
                         AuthenticationResponse.builder()
@@ -31,7 +30,7 @@ public class Auth {
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate (
-            @RequestBody RegisterRequest request
+            @RequestBody RegisterRequestDTO request
     ) {
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }

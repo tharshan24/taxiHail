@@ -1,6 +1,7 @@
 package com.taxi.taxihailcore.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.taxi.taxihailcore.dto.RegisterRequestDTO;
 import com.taxi.taxihailcore.model.Role;
 import com.taxi.taxihailcore.model.Token;
 import com.taxi.taxihailcore.model.TokenType;
@@ -13,7 +14,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,7 +33,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponse register(RegisterRequestDTO request) {
 
         try{
             var user = User.builder()
@@ -55,7 +55,7 @@ public class AuthenticationService {
             return AuthenticationResponse.builder()
                     .accessToken(jwtToken)
                     .refreshToken(refreshToken)
-                    .status(1)
+                    .status(200)
                     .message("User registration successful")
                     .build();
 
@@ -68,7 +68,7 @@ public class AuthenticationService {
 
     }
 
-    public AuthenticationResponse authenticate(@NotNull RegisterRequest request) {
+    public AuthenticationResponse authenticate(@NotNull RegisterRequestDTO request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
@@ -88,7 +88,7 @@ public class AuthenticationService {
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
-                .status(1)
+                .status(200)
                 .message("User authentication successful")
                 .build();
     }

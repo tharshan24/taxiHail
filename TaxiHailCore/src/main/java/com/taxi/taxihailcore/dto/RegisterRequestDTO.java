@@ -1,4 +1,4 @@
-package com.taxi.taxihailcore.auth;
+package com.taxi.taxihailcore.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.time.Instant;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class RegisterRequestDTO {
     private String username;
     private String email;
     private String password;

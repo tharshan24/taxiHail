@@ -1,12 +1,15 @@
 package com.taxi.taxihailcore.controller;
 
 import com.taxi.taxihailcore.auth.AuthenticationResponse;
+import com.taxi.taxihailcore.dto.PasswordResetDTO;
 import com.taxi.taxihailcore.dto.UserDTO;
 import com.taxi.taxihailcore.model.User;
 import com.taxi.taxihailcore.service.LogoutService;
 import com.taxi.taxihailcore.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -40,16 +43,30 @@ public class UserController {
     }
 
     @GetMapping("/view_user")
-    public ResponseEntity<UserDTO> viewUser(HttpServletRequest request) {
+    public ResponseEntity<UserDTO> viewUser(@NotNull HttpServletRequest request) {
         UUID userId = UUID.fromString((String) request.getAttribute("userId"));
         return ResponseEntity.ok(userService.viewUser(userId).getBody());
     }
 
     @PostMapping("/update_user")
     public ResponseEntity<ResponseEntity> updateUser(
-            @RequestBody User request
+            @RequestBody UserDTO request,
+            @NotNull HttpServletRequest httpServletRequest
     ) {
-        return ResponseEntity.ok(userService.updateUser(request));
+        UUID userId = UUID.fromString((String) httpServletRequest.getAttribute("userId"));
+        return ResponseEntity.ok(userService.updateUser(request, userId));
+    }
+
+    @PostMapping("/reset_password")
+    public ResponseEntity<String> resetPassword(
+            @RequestBody @NotNull PasswordResetDTO request,
+            HttpServletRequest httpServletRequest) {
+
+        if(!request.getNewPassword().equals(request.getNewPasswordConfirm())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password doesn't match");
+        }
+        UUID userId = UUID.fromString((String) httpServletRequest.getAttribute("userId"));
+        return userService.resetPassword(request, userId);
     }
 
 }

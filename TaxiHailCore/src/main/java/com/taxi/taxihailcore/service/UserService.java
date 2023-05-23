@@ -1,9 +1,12 @@
 package com.taxi.taxihailcore.service;
 
+import com.taxi.taxihailcore.dto.PasswordResetDTO;
 import com.taxi.taxihailcore.dto.UserDTO;
 import com.taxi.taxihailcore.model.User;
 import com.taxi.taxihailcore.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -12,9 +15,11 @@ import java.util.UUID;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository){
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public ResponseEntity<UserDTO> viewUser(UUID userId) {
@@ -37,29 +42,48 @@ public class UserService {
             userDTO.setCreatedAt(user.getCreatedAt());
             userDTO.setUpdatedAt(user.getUpdatedAt());
 
-            return ResponseEntity.status(1).body(userDTO);
+            return ResponseEntity.ok(userDTO);
         }
         else {
-            return ResponseEntity.status(1).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 
-    public ResponseEntity updateUser(User request) {
+    public ResponseEntity updateUser(UserDTO request, UUID userId) {
         try{
 
-            userRepository.findByUserIdAndStatus(request.getUserId(), 1).ifPresent(user -> {
+            userRepository.findByUserIdAndStatus(userId, 1).ifPresent(user -> {
                 user.setFirstName(request.getFirstName());
                 user.setLastName(request.getLastName());
                 user.setEmail(request.getEmail());
                 user.setMobile(request.getMobile());
-                user.setRole(request.getRole());
                 userRepository.save(user);
             });
 
-            return ResponseEntity.status(1).body("User update successful");
+            return ResponseEntity.ok("User update successful");
 
         } catch (Exception e) {
-            return ResponseEntity.status(1).body("User update failed\nException: " + e.toString());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User update failed\nException: " + e.toString());
         }
+    }
+
+    public ResponseEntity<String> resetPassword(PasswordResetDTO request, UUID userId) {
+        Optional<User> optionalUser = userRepository.findByUserIdAndStatus(userId, 1);
+
+        if(optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            if(!passwordEncoder.matches(request.getOldPassword(), user.getPassword())){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password Error");
+            }
+
+            user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+            userRepository.save(user);
+
+            return ResponseEntity.ok("Password Update Successful");
+
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User Error");
     }
 }

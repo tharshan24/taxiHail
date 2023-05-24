@@ -19,4 +19,10 @@ public class AuthenticationResponse {
     private int status;
     @JsonProperty("message")
     private String message;
+    @JsonProperty("user_id")
+    private String userId;
+    @JsonProperty("username")
+    private String username;
+    @JsonProperty("role")
+    private String role;
 }

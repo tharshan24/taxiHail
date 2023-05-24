@@ -57,6 +57,9 @@ public class AuthenticationService {
                     .refreshToken(refreshToken)
                     .status(200)
                     .message("User registration successful")
+                    .userId(String.valueOf(savedUser.getUserId()))
+                    .username(savedUser.getUsername())
+                    .role(String.valueOf(savedUser.getRole()))
                     .build();
 
         } catch (Exception e) {
@@ -90,6 +93,9 @@ public class AuthenticationService {
                 .refreshToken(refreshToken)
                 .status(200)
                 .message("User authentication successful")
+                .userId(String.valueOf(user.getUserId()))
+                .username(user.getUsername())
+                .role(String.valueOf(user.getRole()))
                 .build();
     }
 

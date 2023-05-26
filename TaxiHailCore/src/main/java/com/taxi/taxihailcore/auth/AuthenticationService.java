@@ -16,6 +16,8 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +36,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequestDTO request) {
+
 
         try{
             var user = User.builder()
@@ -65,38 +68,46 @@ public class AuthenticationService {
         } catch (Exception e) {
             return AuthenticationResponse.builder()
                     .status(0)
-                    .message(e.toString())
+                    .message("User Regisstration Failed: " + e.getMessage())
                     .build();
         }
 
     }
 
     public AuthenticationResponse authenticate(@NotNull RegisterRequestDTO request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
-                )
-        );
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getUsername(),
+                            request.getPassword()
+                    )
+            );
 
-        var user = userRepository.findByUserNameAndStatus(request.getUsername(), 1).orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
-        revokeAllUserTokens(user);
-        saveUserToken(user, jwtToken);
+            var user = userRepository.findByUserNameAndStatus(request.getUsername(), 1).orElseThrow();
+            var jwtToken = jwtService.generateToken(user);
+            var refreshToken = jwtService.generateRefreshToken(user);
+            revokeAllUserTokens(user);
+            saveUserToken(user, jwtToken);
 
-        user.setLastLogin(Timestamp.from(Instant.now()));
-        userRepository.save(user);
+            user.setLastLogin(Timestamp.from(Instant.now()));
+            userRepository.save(user);
 
-        return AuthenticationResponse.builder()
-                .accessToken(jwtToken)
-                .refreshToken(refreshToken)
-                .status(200)
-                .message("User authentication successful")
-                .userId(String.valueOf(user.getUserId()))
-                .username(user.getUsername())
-                .role(String.valueOf(user.getRole()))
-                .build();
+            return AuthenticationResponse.builder()
+                    .accessToken(jwtToken)
+                    .refreshToken(refreshToken)
+                    .status(200)
+                    .message("User authentication successful")
+                    .userId(String.valueOf(user.getUserId()))
+                    .username(user.getUsername())
+                    .role(String.valueOf(user.getRole()))
+                    .build();
+
+        } catch (AuthenticationException ex) {
+            return AuthenticationResponse.builder()
+                    .status(0)
+                    .message("User authentication Failed: " + ex.getMessage())
+                    .build();
+        }
     }
 
     private void saveUserToken(User user, String jwtToken) {

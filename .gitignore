@@ -9,3 +9,5 @@
 /.idea/vcs.xml
 /.idea/dataSources.xml
 /.idea/uiDesigner.xml
+/taxi-hail-client.iml
+/.idea/sqldialects.xml

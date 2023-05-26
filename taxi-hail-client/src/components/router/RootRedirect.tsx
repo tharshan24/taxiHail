@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import React from "react";
-import CheckAuth from "./CheckAuth";
+import CheckAuth from "../auth/CheckAuth";
 
 const RootRedirect : React.FC = () => {
 

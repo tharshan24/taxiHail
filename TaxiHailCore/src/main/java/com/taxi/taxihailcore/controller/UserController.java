@@ -30,7 +30,6 @@ public class UserController {
 
     @GetMapping("/test")
     public ResponseEntity<String> test() {
-        System.out.println("\n\n\nnqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq\n\n\n\n\n");
         return ResponseEntity.ok("Test ok");
     }
 

@@ -21,22 +21,21 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            .csrf()
-            .disable()
-            .authorizeHttpRequests()
-                .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/user/**").authenticated()
-                .requestMatchers("/passenger/**").hasRole("PASSENGER")
-                .requestMatchers("/driver/**").hasRole("DRIVER")
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-            .anyRequest()
-            .authenticated()
-            .and()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            .authenticationProvider(authenticationProvider)
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .cors()
+                .and()
+                .csrf().disable()
+                .authorizeHttpRequests()
+                    .requestMatchers("/auth/**").permitAll()
+                    .requestMatchers("/user/**").authenticated()
+                    .requestMatchers("/passenger/**").hasRole("PASSENGER")
+                    .requestMatchers("/driver/**").hasRole("DRIVER")
+                    .requestMatchers("/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

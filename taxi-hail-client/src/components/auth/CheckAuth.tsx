@@ -14,7 +14,6 @@ const CheckAuth = ( ) => {
                             Authorization: `Bearer ${token}`
                         }
                     });
-                    alert(response);
                     if (response.status === 200) {
                         setAccess(true);
                     }

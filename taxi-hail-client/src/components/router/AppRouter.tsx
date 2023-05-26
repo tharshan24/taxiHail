@@ -33,8 +33,8 @@ export const AppRouter: React.FC = () => {
     )
 
     return (
-        <BrowserRouter>
-         <Routes>
+         <BrowserRouter>
+            <Routes>
                 <Route path="auth" element={ lazyLogin } >
                     <Route path="login" element={<LoginPage />} />
                     <Route path="signup" element={<SignUpPage />} />
@@ -49,6 +49,6 @@ export const AppRouter: React.FC = () => {
                 </Route>
                 <Route path="/*" element={ <RootRedirect /> }/>
             </Routes>
-        </BrowserRouter>
+         </BrowserRouter>
     );
 };

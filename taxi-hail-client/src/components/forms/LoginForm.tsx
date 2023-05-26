@@ -3,6 +3,7 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import React from "react";
+import SessionManager from "../auth/SessionManager";
 
 export const LoginForm: React.FC = () => {
 
@@ -18,22 +19,13 @@ export const LoginForm: React.FC = () => {
         axios.post('http://localhost:8080/auth/authenticate', values)
             .then(response => {
                 // Handle the response from the server
-                if(response.status === 200) {
-
-                    sessionStorage.setItem('accessToken', response.data.access_token);
-                    sessionStorage.setItem('refreshToken', response.data.refresh_token);
-                    sessionStorage.setItem('userId', response.data.user_id);
-                    sessionStorage.setItem('username', response.data.username);
-                    sessionStorage.setItem('role', response.data.role);
-
-                    setTimeout(() => {
-                        navigate('/dashboard');
-                    }, 500)
-
+                if(response.data.status === 200) {
+                    SessionManager(response.data);
+                    navigate('/dashboard/home');
                 }
                 else {
                     sessionStorage.clear();
-                    alert(response.data.message);
+                    alert(response.data.message)
                 }
             })
             .catch(error => {
@@ -47,7 +39,7 @@ export const LoginForm: React.FC = () => {
     };
 
     const onFill = () => {
-        navigate('/signup');
+        navigate('/auth/signup');
     };
 
     return (

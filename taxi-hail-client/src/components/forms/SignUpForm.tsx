@@ -6,6 +6,8 @@ import {
 } from 'antd';
 import {useNavigate} from "react-router-dom";
 import React from "react";
+import axios from "axios";
+import SessionManager from "../auth/SessionManager";
 
 const { Option } = Select;
 
@@ -41,7 +43,25 @@ const SignUpForm: React.FC = () => {
     const navigate = useNavigate();
 
     const onFinish = (values: any) => {
-        console.log('Received values of form: ', values);
+
+        axios.post('http://localhost:8080/auth/register', values)
+            .then(response => {
+                // Handle the response from the server
+                if(response.data.status === 200) {
+                    SessionManager(response.data);
+                    navigate('/dashboard/home');
+                }
+                else {
+                    sessionStorage.clear();
+                    alert(response.data)
+                    console.log(response)
+                }
+            })
+            .catch(error => {
+                sessionStorage.clear();
+                alert(error.response.data);
+                console.log(error.response)
+            });
     };
 
     const prefixSelector = (
@@ -57,7 +77,7 @@ const SignUpForm: React.FC = () => {
     };
 
     const onFill = () => {
-        navigate('/');
+        navigate('/auth/login');
     };
 
     const validateStrongPassword = (_: any, value: string) => {
@@ -100,7 +120,7 @@ const SignUpForm: React.FC = () => {
             </Form.Item>
 
             <Form.Item
-                name="lastname"
+                name="lastName"
                 label="Last Name"
                 tooltip="Enter your sir name"
                 rules={[{ required: false, message: 'Please input your last name!' }]}
@@ -110,7 +130,7 @@ const SignUpForm: React.FC = () => {
 
             <Form.Item
                 name="username"
-                label="Nickname"
+                label="Username"
                 tooltip="What do you want others to call you?"
                 rules={[{ required: true, message: 'Please input your username!' }]}
             >
@@ -137,7 +157,16 @@ const SignUpForm: React.FC = () => {
             <Form.Item
                 name="mobile"
                 label="Mobile Number"
-                rules={[{ required: true, message: 'Please input your phone number!' }]}
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input your phone number!'
+                    },
+                    {
+                        len: 9,
+                        message: 'Mobile number should be of length 9'
+                    }
+                ]}
             >
                 <Input addonBefore={prefixSelector} style={{ width: '100%' }} />
             </Form.Item>
@@ -160,7 +189,7 @@ const SignUpForm: React.FC = () => {
             </Form.Item>
 
             <Form.Item
-                name="confirmPassword"
+                name="passwordConfirm"
                 label="Confirm Password"
                 dependencies={['password']}
                 hasFeedback

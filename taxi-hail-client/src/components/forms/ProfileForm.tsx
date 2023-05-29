@@ -8,6 +8,7 @@ import {useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import SessionManager from "../auth/SessionManager";
+import moment from "moment";
 
 const formItemLayout = {
     labelCol: {
@@ -57,8 +58,8 @@ const ProfileForm: React.FC = () => {
                             username: response.data.userName,
                             role: response.data.role,
                             status: response.data.status,
-                            lastLogin: response.data.lastLogin,
-                            accountCreated: response.data.accountCreated,
+                            lastLogin: moment(response.data.lastLogin).format('YYYY-MM-DD HH:mm:ss'),
+                            accountCreated: moment(response.data.createdAt).format('YYYY-MM-DD'),
                             firstName: response.data.firstName,
                             lastName: response.data.lastName,
                             email: response.data.email,
@@ -77,6 +78,8 @@ const ProfileForm: React.FC = () => {
                 // Request failed or unauthorized
                 sessionStorage.clear();
                 console.error(error);
+                alert(error);
+                navigate('/auth/profile');
             }
         };
 
@@ -99,6 +102,7 @@ const ProfileForm: React.FC = () => {
                 // Handle the response from the server
                 if(response.data.statusCodeValue === 200) {
                     alert(response.data.body);
+                    setUserData({...userData, ...values})
                     // navigate('/dashboard/profile');
                 }
                 else {

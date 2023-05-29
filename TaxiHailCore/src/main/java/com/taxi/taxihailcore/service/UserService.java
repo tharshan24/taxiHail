@@ -80,7 +80,7 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(request.getNewPassword()));
             userRepository.save(user);
 
-            return ResponseEntity.ok("Password Update Successful");
+            return ResponseEntity.status(HttpStatus.OK).body("Password Update Successful");
 
         }
 

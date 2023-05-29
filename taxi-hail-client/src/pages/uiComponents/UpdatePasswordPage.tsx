@@ -1,10 +1,11 @@
 import React from "react";
+import UpdatePasswordForm from "../../components/forms/UpdatePasswordForm";
 
 const UpdatePasswordPage: React.FC = () => {
 
     return (
         <>
-            Password
+            <UpdatePasswordForm />
         </>
     );
 };

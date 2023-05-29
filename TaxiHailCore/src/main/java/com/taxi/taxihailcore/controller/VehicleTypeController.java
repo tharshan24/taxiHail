@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/vehicle_types")
+@RequestMapping("/vehicle_type")
 public class VehicleTypeController {
 
     private final VehicleTypeService vehicleTypeService;

@@ -3,10 +3,12 @@ package com.taxi.taxihailcore.auth;
 import com.taxi.taxihailcore.dto.RegisterRequestDTO;
 import com.taxi.taxihailcore.exceptions.UserRegistrationException;
 import com.taxi.taxihailcore.repository.UserRepository;
+import com.taxi.taxihailcore.service.LogoutService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -17,6 +19,7 @@ import java.io.IOException;
 public class Auth {
     private final AuthenticationService authenticationService;
     private final UserRepository userRepository;
+    private final LogoutService logoutService;
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register (@RequestBody RegisterRequestDTO request) {
@@ -57,6 +60,15 @@ public class Auth {
             HttpServletResponse response
     ) throws IOException {
         authenticationService.refreshToken(request, response);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<AuthenticationResponse> logout(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Authentication authentication)
+    {
+        return ResponseEntity.ok(logoutService.logout(request, response, authentication));
     }
 
     @GetMapping("/test")

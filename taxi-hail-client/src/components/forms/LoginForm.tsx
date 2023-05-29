@@ -15,24 +15,25 @@ export const LoginForm: React.FC = () => {
     };
 
     const onFinish = (values: any) => {
-
-        axios.post('http://localhost:8080/auth/authenticate', values)
+        axios
+            .post('http://localhost:8080/auth/authenticate', values)
             .then(response => {
-                // Handle the response from the server
-                if(response.data.status === 200) {
-                    SessionManager(response.data);
-                    navigate('/dashboard/home');
-                }
-                else {
+                if (response.data.status === 200) {
+                    return SessionManager(response.data); // Return the promise from SessionManager
+                } else {
                     sessionStorage.clear();
-                    alert(response.data.message)
+                    throw new Error(response.data.message);
                 }
+            })
+            .then(() => {
+                navigate('/dashboard/home');
             })
             .catch(error => {
                 sessionStorage.clear();
                 alert(error);
             });
     };
+
 
     const onReset = () => {
         formRef.current?.resetFields();

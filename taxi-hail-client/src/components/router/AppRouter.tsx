@@ -16,7 +16,7 @@ import LazyLogin from "./LazyLogin";
 
 export const AppRouter: React.FC = () => {
 
-    const getRole = () => {
+    let getRole = () => {
         return sessionStorage.getItem("role");
     }
 

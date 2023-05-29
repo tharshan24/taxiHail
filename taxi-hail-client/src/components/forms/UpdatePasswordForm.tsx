@@ -56,14 +56,14 @@ const UpdatePasswordForm: React.FC = () => {
                     navigate('/dashboard/update-password');
                 }
                 else {
-                    sessionStorage.clear();
+                    // sessionStorage.clear();
                     alert(response.data)
                     console.log(response)
                 }
             })
             .catch(error => {
-                sessionStorage.clear();
-                alert(error.response.data);
+                // sessionStorage.clear();
+                alert(error.response);
                 console.log(error.response)
             });
     };
@@ -146,7 +146,7 @@ const UpdatePasswordForm: React.FC = () => {
 
             <Form.Item {...tailFormItemLayout}>
                 <Button type="primary" htmlType="submit" style={{ marginRight: '8px' }}>
-                    Register
+                    Update
                 </Button>
                 <Button htmlType="button" onClick={onReset}>
                     Reset

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/vehicles")
+@RequestMapping("/vehicle")
 public class VehicleController {
 
     private final VehicleService vehicleService;
@@ -14,3 +14,4 @@ public class VehicleController {
         this.vehicleService = vehicleService;
     }
 }
+

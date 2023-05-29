@@ -16,10 +16,10 @@ const AppFooter = () => {
     return (
         <Footer style={footerStyle}>
             <div>
-                Random Detail 1 | Random Detail 2 | Random Detail 3
+                ------------- | ------ TaxiHail ------ | -------------
             </div>
             <div>
-                &copy; 2023 Your Company Name. All rights reserved.
+                &copy; 2023 TaxiHail. All rights reserved.
             </div>
         </Footer>
     );

@@ -18,7 +18,8 @@ const AppNavbar: React.FC = () => {
             .then(response => {
                 // Handle the response from the server
                 if(response.data.status === 200) {
-                    SessionManager(response.data);
+                    sessionStorage.clear();
+                    alert(response.data.message);
                     navigate('/auth/login');
                 }
                 else {

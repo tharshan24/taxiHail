@@ -27,7 +27,7 @@ public class LogoutService implements LogoutServiceInterface {
             return AuthenticationResponse.builder()
                     .accessToken(null)
                     .refreshToken(null)
-                    .status(1)
+                    .status(0)
                     .message("Logout Unsuccessful")
                     .build();
         }
@@ -43,7 +43,7 @@ public class LogoutService implements LogoutServiceInterface {
         return AuthenticationResponse.builder()
                 .accessToken(null)
                 .refreshToken(null)
-                .status(0)
+                .status(200)
                 .message("Logout Successful")
                 .build();
     }

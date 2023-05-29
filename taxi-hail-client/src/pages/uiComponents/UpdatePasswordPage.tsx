@@ -4,7 +4,7 @@ const UpdatePasswordPage: React.FC = () => {
 
     return (
         <>
-
+            Password
         </>
     );
 };

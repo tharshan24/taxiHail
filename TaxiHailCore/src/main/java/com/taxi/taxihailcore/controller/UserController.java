@@ -3,7 +3,9 @@ package com.taxi.taxihailcore.controller;
 import com.taxi.taxihailcore.auth.AuthenticationResponse;
 import com.taxi.taxihailcore.dto.PasswordResetDTO;
 import com.taxi.taxihailcore.dto.UserDTO;
+import com.taxi.taxihailcore.exceptions.UserRegistrationException;
 import com.taxi.taxihailcore.model.User;
+import com.taxi.taxihailcore.repository.UserRepository;
 import com.taxi.taxihailcore.service.LogoutService;
 import com.taxi.taxihailcore.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -22,10 +25,12 @@ public class UserController {
 
     private final UserService userService;
     private final LogoutService logoutService;
+    private final UserRepository userRepository;
 
-    public UserController(UserService userService, LogoutService logoutService){
+    public UserController(UserService userService, LogoutService logoutService, UserRepository userRepository){
         this.userService = userService;
         this.logoutService = logoutService;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/test")
@@ -54,6 +59,20 @@ public class UserController {
             @NotNull HttpServletRequest httpServletRequest
     ) {
         UUID userId = UUID.fromString((String) httpServletRequest.getAttribute("userId"));
+        Optional<User> user = userRepository.findByUserId(userId);
+        if (user.isPresent()) {
+            User user1 = user.get();
+            if (userRepository.existsByEmail(request.getEmail()) && !request.getEmail().equals(user1.getEmail())) {
+                throw new UserRegistrationException("Email already exists");
+            }
+
+            if (userRepository.existsByMobile(request.getMobile()) && !request.getMobile().equals(user1.getMobile())) {
+                throw new UserRegistrationException("Mobile already exists");
+            }
+        }
+        else {
+            throw new UserRegistrationException("User not found");
+        }
         return ResponseEntity.ok(userService.updateUser(request, userId));
     }
 

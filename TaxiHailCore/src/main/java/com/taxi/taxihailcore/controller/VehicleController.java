@@ -1,5 +1,8 @@
 package com.taxi.taxihailcore.controller;
 
+import com.taxi.taxihailcore.dto.UserDTO;
+import com.taxi.taxihailcore.dto.VehicleDTO;
+import com.taxi.taxihailcore.dto.VehicleTypeDTO;
 import com.taxi.taxihailcore.model.User;
 import com.taxi.taxihailcore.model.VehicleType;
 import com.taxi.taxihailcore.repository.UserRepository;
@@ -10,6 +13,7 @@ import com.taxi.taxihailcore.response.CommonResponse;
 import com.taxi.taxihailcore.service.VehicleService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +36,7 @@ public class VehicleController {
     }
 
     @GetMapping("/view_vehicle_by_user")
-    public ResponseEntity<Vehicle> viewVehicleByUSer(
+    public ResponseEntity<VehicleDTO> viewVehicleByUSer(
             @NotNull HttpServletRequest request
     ) {
         UUID userId = UUID.fromString((String) request.getAttribute("userId"));
@@ -41,8 +45,21 @@ public class VehicleController {
             User user = optionalUser.get();
             Optional<Vehicle> optionalVehicle = vehicleService.viewVehicleByDriver(user);
             if (optionalVehicle.isPresent()) {
+
                 Vehicle vehicle = optionalVehicle.get();
-                return ResponseEntity.ok(vehicle);
+                VehicleDTO vehicleDTO = new VehicleDTO();
+                BeanUtils.copyProperties(vehicle, vehicleDTO);
+
+                VehicleTypeDTO vehicleTypeDTO = new VehicleTypeDTO();
+                VehicleType vehicleType = vehicle.getVehicleType();
+                BeanUtils.copyProperties(vehicleType, vehicleTypeDTO);
+                vehicleDTO.setVehicleType(vehicleTypeDTO);
+
+                UserDTO userDTO = new UserDTO();
+                BeanUtils.copyProperties(user, userDTO);
+                vehicleDTO.setDriver(userDTO);
+
+                return ResponseEntity.ok(vehicleDTO);
             }
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         }
@@ -53,7 +70,7 @@ public class VehicleController {
     public ResponseEntity<CommonResponse> addVehicle (@RequestBody @NotNull Vehicle request) {
         // Check if the vehicle already exists in the database
         if (vehicleRepository.existsByVehicleNo(request.getVehicleNo())) {
-            throw new UserRegistrationException("Username already exists");
+            throw new UserRegistrationException("Vehicle number already exists");
         }
         return ResponseEntity.ok(vehicleService.addVehicle(request));
     }

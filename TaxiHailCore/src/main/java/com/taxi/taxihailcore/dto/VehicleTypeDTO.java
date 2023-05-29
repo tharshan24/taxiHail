@@ -1,14 +1,10 @@
 package com.taxi.taxihailcore.dto;
 
-import com.taxi.taxihailcore.model.Role;
-import com.taxi.taxihailcore.model.User;
-import com.taxi.taxihailcore.model.VehicleType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -16,11 +12,12 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class VehicleDTO {
-    private UUID vehicleId;
-    private String vehicleNo;
-    private VehicleTypeDTO vehicleType;
-    private UserDTO driver;
+public class VehicleTypeDTO {
+    private UUID vehicleTypeId;
+    private String vehicleType;
+    private String vehicleShort;
+    private String description;
+    private int seatCount;
     private int status;
     private Instant createdAt;
     private Instant updatedAt;

@@ -8,6 +8,7 @@ import com.taxi.taxihailcore.model.TokenType;
 import com.taxi.taxihailcore.model.User;
 import com.taxi.taxihailcore.repository.TokenRepository;
 import com.taxi.taxihailcore.repository.UserRepository;
+import com.taxi.taxihailcore.response.AuthenticationResponse;
 import com.taxi.taxihailcore.service.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

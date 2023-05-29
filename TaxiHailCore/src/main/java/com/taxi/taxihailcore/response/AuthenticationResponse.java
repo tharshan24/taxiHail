@@ -1,4 +1,4 @@
-package com.taxi.taxihailcore.auth;
+package com.taxi.taxihailcore.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

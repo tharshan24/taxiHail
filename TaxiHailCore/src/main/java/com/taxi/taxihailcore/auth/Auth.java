@@ -3,6 +3,7 @@ package com.taxi.taxihailcore.auth;
 import com.taxi.taxihailcore.dto.RegisterRequestDTO;
 import com.taxi.taxihailcore.exceptions.UserRegistrationException;
 import com.taxi.taxihailcore.repository.UserRepository;
+import com.taxi.taxihailcore.response.AuthenticationResponse;
 import com.taxi.taxihailcore.service.LogoutService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

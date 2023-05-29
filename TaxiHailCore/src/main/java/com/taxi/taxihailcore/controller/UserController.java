@@ -1,6 +1,6 @@
 package com.taxi.taxihailcore.controller;
 
-import com.taxi.taxihailcore.auth.AuthenticationResponse;
+import com.taxi.taxihailcore.response.AuthenticationResponse;
 import com.taxi.taxihailcore.dto.PasswordResetDTO;
 import com.taxi.taxihailcore.dto.UserDTO;
 import com.taxi.taxihailcore.exceptions.UserRegistrationException;

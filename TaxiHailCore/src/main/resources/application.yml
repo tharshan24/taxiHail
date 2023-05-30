@@ -11,7 +11,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5332/taxihail
+    url: jdbc:postgresql://localhost:5332/taxihail_core
     username: taxi
     password: password
     driver-class-name: org.postgresql.Driver

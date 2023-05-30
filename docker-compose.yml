@@ -1,0 +1,30 @@
+services:
+  db_taxihail_core:
+    container_name: db_taxihail_core
+    image: postgres
+    environment:
+      POSTGRES_USER: taxi
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: taxihail_core
+    volumes:
+       - $HOME/docker/volumes/taxihail/core:/var/lib/postgresql/data
+    ports:
+      - "5332:5432"
+    restart: unless-stopped
+
+  db_taxihail_location:
+    container_name: db_taxihail_location
+    image: postgres
+    environment:
+      POSTGRES_USER: taxi
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: taxihail_location
+    volumes:
+      - $HOME/docker/volumes/taxihail/location:/var/lib/postgresql/data
+    ports:
+      - "5333:5432"
+    restart: unless-stopped
+
+#networks:
+#  db:
+#    driver: bridge

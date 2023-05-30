@@ -58,7 +58,7 @@ const ProfileForm: React.FC = () => {
                             username: response.data.userName,
                             role: response.data.role,
                             status: response.data.status,
-                            lastLogin: moment(response.data.lastLogin).format('YYYY-MM-DD HH:mm:ss'),
+                            lastLogin: response.data.lastLogin ? moment(response.data.lastLogin).format('YYYY-MM-DD HH:mm:ss') : "Initialized Now",
                             createdAt: moment(response.data.createdAt).format('YYYY-MM-DD'),
                             firstName: response.data.firstName,
                             lastName: response.data.lastName,

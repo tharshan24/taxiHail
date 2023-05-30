@@ -25,7 +25,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/vehicle")
-@PreAuthorize("hasAnyRole('DRIVER', 'ADMIN')")
 public class VehicleController {
 
     private final VehicleService vehicleService;

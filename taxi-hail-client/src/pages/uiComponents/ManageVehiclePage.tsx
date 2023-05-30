@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Spin} from "antd";
-import axios from "axios/index";
+import axios from "axios";
 import moment from "moment/moment";
 import {useNavigate} from "react-router-dom";
 
@@ -23,23 +23,25 @@ const ManageVehiclePage: React.FC = () => {
                 if (response.status === 200) {
                     setTimeout(() => {
                         const fetchedData = {
-
+                            vehicleId: response.data.vehicleId,
+                            vehicleType: response.data.vehicleType,
+                            vehicleNo: response.data.vehicleNo,
+                            createdAt: response.data.createdAt
                         };
                         setVehicleData(fetchedData);
                         setLoading(false);
                     }, 500);
-                } else {
-                    sessionStorage.clear();
-                    alert(response.data)
+                } else if (response.status == 204) {
+                    // alert(response)
                     console.log(response)
-                    navigate('/auth/profile');
+                    setLoading(false);
                 }
             } catch (error) {
                 // Request failed or unauthorized
                 sessionStorage.clear();
                 console.error(error);
                 alert(error);
-                navigate('/auth/profile');
+                navigate('/dashboard/home');
             }
         };
 
@@ -51,9 +53,15 @@ const ManageVehiclePage: React.FC = () => {
         return <Spin size="large" />;
     }
 
-    return (
-        <></>
-    );
+    if (vehicleData !== null && !vehicleData.isEmpty()) {
+        return (
+            <></>
+        );
+    } else {
+        return (
+            <></>
+        );
+    }
 
 };
 

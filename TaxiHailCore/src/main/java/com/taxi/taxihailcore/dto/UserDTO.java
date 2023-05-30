@@ -24,6 +24,6 @@ public class UserDTO {
     private Role role;
     private int status;
     private Timestamp lastLogin;
-    private Instant createdAt;
-    private Instant updatedAt;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 }

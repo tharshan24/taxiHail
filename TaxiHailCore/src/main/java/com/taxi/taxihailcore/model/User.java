@@ -66,11 +66,11 @@ public class User implements UserDetails {
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false, nullable = false)
-    private Instant createdAt;
+    private Timestamp createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
-    private Instant updatedAt;
+    private Timestamp updatedAt;
 
     @OneToOne(mappedBy = "driver", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn

@@ -59,7 +59,7 @@ const ProfileForm: React.FC = () => {
                             role: response.data.role,
                             status: response.data.status,
                             lastLogin: moment(response.data.lastLogin).format('YYYY-MM-DD HH:mm:ss'),
-                            accountCreated: moment(response.data.createdAt).format('YYYY-MM-DD'),
+                            createdAt: moment(response.data.createdAt).format('YYYY-MM-DD'),
                             firstName: response.data.firstName,
                             lastName: response.data.lastName,
                             email: response.data.email,
@@ -177,7 +177,7 @@ const ProfileForm: React.FC = () => {
                     </Col>
                     <Col span={14}>
                         <Form.Item label="Account Created">
-                            <span>{userData.accountCreated}</span>
+                            <span>{userData.createdAt}</span>
                         </Form.Item>
                     </Col>
                 </Row>

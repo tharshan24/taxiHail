@@ -69,12 +69,18 @@ public class VehicleController {
     }
 
     @PostMapping("/add_vehicle")
-    public ResponseEntity<CommonResponse> addVehicle (@RequestBody @NotNull Vehicle request) {
+    public ResponseEntity<CommonResponse> addVehicle (
+            @RequestBody @NotNull Vehicle request,
+            @NotNull HttpServletRequest httpServletRequest
+    ) {
         // Check if the vehicle already exists in the database
         if (vehicleRepository.existsByVehicleNo(request.getVehicleNo())) {
             throw new UserRegistrationException("Vehicle number already exists");
         }
-        return ResponseEntity.ok(vehicleService.addVehicle(request));
+
+        UUID userId = UUID.fromString((String) httpServletRequest.getAttribute("userId"));
+        Optional<User> optionalUser = userRepository.findByUserId(userId);
+        return ResponseEntity.ok(vehicleService.addVehicle(request, optionalUser.get()));
     }
 
     @PostMapping("/update_vehicle")

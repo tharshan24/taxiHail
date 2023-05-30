@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {Spin} from "antd";
 import axios from "axios";
-import moment from "moment/moment";
 import {useNavigate} from "react-router-dom";
+import {AddVehicleForm} from "../../components/forms/AddVehicleForm";
+import {UpdateVehicleForm} from "../../components/forms/UpdateVehicleForm";
 
 const ManageVehiclePage: React.FC = () => {
 
@@ -53,13 +54,13 @@ const ManageVehiclePage: React.FC = () => {
         return <Spin size="large" />;
     }
 
-    if (vehicleData !== null && !vehicleData.isEmpty()) {
+    if (vehicleData !== null) {
         return (
-            <></>
+            <UpdateVehicleForm vehicleData={vehicleData}/>
         );
     } else {
         return (
-            <></>
+            <AddVehicleForm vehicleData={vehicleData} />
         );
     }
 

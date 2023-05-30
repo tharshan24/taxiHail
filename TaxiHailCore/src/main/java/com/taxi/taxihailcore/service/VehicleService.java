@@ -3,12 +3,9 @@ package com.taxi.taxihailcore.service;
 import com.taxi.taxihailcore.model.User;
 import com.taxi.taxihailcore.repository.UserRepository;
 import com.taxi.taxihailcore.repository.VehicleTypeRepository;
-import com.taxi.taxihailcore.response.AuthenticationResponse;
 import com.taxi.taxihailcore.model.Vehicle;
 import com.taxi.taxihailcore.repository.VehicleRepository;
 import com.taxi.taxihailcore.response.CommonResponse;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -30,12 +27,12 @@ public class VehicleService {
         return vehicleRepository.findByDriverAndStatus(user, 1);
     }
 
-    public CommonResponse addVehicle(Vehicle request) {
+    public CommonResponse addVehicle(Vehicle request, User driver) {
         try{
             var vehicle = Vehicle.builder()
                     .vehicleNo(request.getVehicleNo())
                     .vehicleType(request.getVehicleType())
-                    .driver(request.getDriver())
+                    .driver(driver)
                     .status(1)
                     .build();
 

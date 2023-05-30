@@ -13,6 +13,7 @@ import RequireAuth from "./RequireAuth";
 import Middle from "./Middle"
 import RootRedirect from "./RootRedirect";
 import LazyLogin from "./LazyLogin";
+import ManageVehiclePage from "../../pages/uiComponents/ManageVehiclePage";
 
 export const AppRouter: React.FC = () => {
 
@@ -46,6 +47,7 @@ export const AppRouter: React.FC = () => {
                     />
                     <Route path="profile" element={<ProfilePage />} />
                     <Route path="update-password" element={<UpdatePasswordPage />} />
+                    <Route path="manage-vehicle" element={getRole() === "DRIVER" ? <ManageVehiclePage /> : <RootRedirect /> } />
                 </Route>
                 <Route path="/*" element={ <RootRedirect /> }/>
             </Routes>

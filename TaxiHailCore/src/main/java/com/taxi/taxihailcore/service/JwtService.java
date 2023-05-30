@@ -39,7 +39,7 @@ public class JwtService {
     }
 
     public String extractUserRole(String jwt) {
-        return extractClaim(jwt, claims -> claims.get("role", String.class));
+        return extractClaim(jwt, claims -> claims.get("ROLE", String.class));
     }
 
     public <T> T extractClaim(String jwt, @NotNull Function<Claims, T> claimsResolver) {
@@ -75,7 +75,7 @@ public class JwtService {
         // Add the extra claims to the existing claims
         Map<String, Object> claims = new HashMap<>(extraClaims);
         claims.put("userId", userId);
-        claims.put("role", role);
+        claims.put("ROLE", role);
 
         return Jwts
                 .builder()

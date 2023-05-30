@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout, Menu } from 'antd';
-import { HomeOutlined, UserOutlined, LockOutlined } from '@ant-design/icons';
+import { HomeOutlined, UserOutlined, LockOutlined, CarOutlined } from '@ant-design/icons';
 import {Link} from "react-router-dom";
 
 const { Sider } = Layout;
@@ -22,6 +22,13 @@ const AppSidebar: React.FC = () => {
                 <Menu.Item key="change-password" icon={<LockOutlined />}>
                     <Link to="/dashboard/update-password">Change Password</Link>
                 </Menu.Item>
+                { sessionStorage.getItem('role') == "DRIVER" ?
+                <Menu.Item key="manage-vehicle" icon={<CarOutlined />}>
+                    <Link to="/dashboard/manage-vehicle">Manage Vehicle</Link>
+                </Menu.Item>
+                    :
+                    null
+                }
             </Menu>
         </Sider>
     );

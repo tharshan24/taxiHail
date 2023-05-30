@@ -14,8 +14,10 @@ import com.taxi.taxihailcore.service.VehicleService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -23,6 +25,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/vehicle")
+@PreAuthorize("hasAnyRole('DRIVER', 'ADMIN')")
 public class VehicleController {
 
     private final VehicleService vehicleService;

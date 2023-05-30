@@ -69,7 +69,7 @@ public class AuthenticationService {
         } catch (Exception e) {
             return AuthenticationResponse.builder()
                     .status(0)
-                    .message("User Regisstration Failed: " + e.getMessage())
+                    .message("User Registration Failed: " + e.getMessage())
                     .build();
         }
 

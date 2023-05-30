@@ -46,21 +46,19 @@ const SignUpForm: React.FC = () => {
 
         axios.post('http://localhost:8080/auth/register', values)
             .then(response => {
-                // Handle the response from the server
-                if(response.data.status === 200) {
-                    SessionManager(response.data);
-                    navigate('/dashboard/home');
-                }
-                else {
+                if (response.data.status === 200) {
+                    return SessionManager(response.data); // Return the promise from SessionManager
+                } else {
                     sessionStorage.clear();
-                    alert(response.data)
-                    console.log(response)
+                    throw new Error(response.data.message);
                 }
+            })
+            .then(() => {
+                navigate('/dashboard/home');
             })
             .catch(error => {
                 sessionStorage.clear();
-                alert(error.response.data);
-                console.log(error.response)
+                alert(error);
             });
     };
 

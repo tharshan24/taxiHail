@@ -1,5 +1,3 @@
-import React from "react";
-
 const SessionManager = (data: { access_token: string; refresh_token: string; user_id: string; username: string; role: string; }) => {
 
     sessionStorage.setItem('accessToken', data.access_token);

@@ -5,7 +5,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,7 +25,7 @@ public class VehicleType {
     @Column(name = "seat_count", length = 2, nullable = false)
     private int seatCount;
 
-    @Column(name = "description", length = 256, nullable = true)
+    @Column(name = "description", length = 256)
     private String description;
 
     @Column(name = "status", length = 1, nullable = false)

@@ -32,7 +32,7 @@ const ManageVehiclePage: React.FC = () => {
                         setVehicleData(fetchedData);
                         setLoading(false);
                     }, 500);
-                } else if (response.status == 204) {
+                } else if (response.status === 204) {
                     // alert(response)
                     console.log(response)
                     setLoading(false);
@@ -60,7 +60,7 @@ const ManageVehiclePage: React.FC = () => {
         );
     } else {
         return (
-            <AddVehicleForm vehicleData={vehicleData} />
+            <AddVehicleForm />
         );
     }
 

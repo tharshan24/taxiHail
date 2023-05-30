@@ -12,7 +12,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -34,15 +33,15 @@ public class User implements UserDetails {
     private String email;
 
     @JsonIgnore
-    @Column(name = "password", length = 256, unique = false, nullable = false)
+    @Column(name = "password", length = 256, nullable = false)
     private String password;
 
     @JsonIgnore
-    @Column(name = "salt", length = 64, unique = false, nullable = false)
+    @Column(name = "salt", length = 64, nullable = false)
     private String salt;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", length = 12, unique = false, nullable = false, updatable = false)
+    @Column(name = "role", length = 12, nullable = false, updatable = false)
     private Role role;
 
     @Column(name = "username", length = 32, unique = true, nullable = false, updatable = false)
@@ -52,16 +51,16 @@ public class User implements UserDetails {
     @Size(min = 9, max = 9, message = "Enter valid mobile number !")
     private String mobile;
 
-    @Column(name = "first_name", length = 64, unique = false, nullable = false)
+    @Column(name = "first_name", length = 64, nullable = false)
     private String firstName;
 
-    @Column(name = "last_name", length = 64, unique = false, nullable = true)
+    @Column(name = "last_name", length = 64)
     private String lastName;
 
-    @Column(name = "status", length = 1, unique = false, nullable = false)
+    @Column(name = "status", length = 1, nullable = false)
     private int status;
 
-    @Column(name = "last_login", nullable = true)
+    @Column(name = "last_login")
     private Timestamp lastLogin;
 
     @CreationTimestamp

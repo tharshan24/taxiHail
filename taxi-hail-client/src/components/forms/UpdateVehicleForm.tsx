@@ -1,5 +1,7 @@
+// noinspection DuplicatedCode
+
 import {Button, Form, FormInstance, Input, Select, Spin} from 'antd';
-import {CarOutlined, LockOutlined, UserOutlined} from '@ant-design/icons';
+import {CarOutlined} from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import React, {useEffect, useState} from "react";
@@ -16,6 +18,7 @@ export const UpdateVehicleForm: React.FC<any> = (vehicleData: any) => {
     useEffect(() => {
         fetchVehicleTypes();
 
+
     }, []);
 
     const fetchVehicleTypes = async () => {
@@ -28,7 +31,7 @@ export const UpdateVehicleForm: React.FC<any> = (vehicleData: any) => {
             });
             const data = response.data.body;
                 setVehicleTypes(data);
-                setLoading(false)
+                setLoading(false);
         } catch (error) {
             console.error(error);
         }

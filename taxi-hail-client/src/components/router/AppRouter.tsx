@@ -1,4 +1,4 @@
-import {BrowserRouter, Outlet, Route, Routes} from 'react-router-dom';
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
 
 // Import your components for signup, sign-in, and dashboard
 import SignUpPage from "../../pages/auth/SignUpPage";

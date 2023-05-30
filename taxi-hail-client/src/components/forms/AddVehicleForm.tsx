@@ -1,12 +1,14 @@
+// noinspection DuplicatedCode
+
 import {Button, Form, FormInstance, Input, Select, Spin} from 'antd';
-import {CarOutlined, LockOutlined, UserOutlined} from '@ant-design/icons';
+import {CarOutlined} from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import React, {useEffect, useState} from "react";
 
 
 const { Option } = Select;
-export const AddVehicleForm: React.FC<any> = (vehicleData: any) => {
+export const AddVehicleForm: React.FC = () => {
 
     const formRef = React.useRef<FormInstance>(null);
     const navigate = useNavigate();

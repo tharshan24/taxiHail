@@ -7,9 +7,6 @@ import {
 import {useNavigate} from "react-router-dom";
 import React from "react";
 import axios from "axios";
-import SessionManager from "../auth/SessionManager";
-
-const { Option } = Select;
 
 const formItemLayout = {
     labelCol: {

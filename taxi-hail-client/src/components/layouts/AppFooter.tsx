@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout } from 'antd';
 
-const { Footer: Footer } = Layout;
+const { Footer } = Layout;
 
 const AppFooter = () => {
 

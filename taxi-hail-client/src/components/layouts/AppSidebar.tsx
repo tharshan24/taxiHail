@@ -22,7 +22,7 @@ const AppSidebar: React.FC = () => {
                 <Menu.Item key="change-password" icon={<LockOutlined />}>
                     <Link to="/dashboard/update-password">Change Password</Link>
                 </Menu.Item>
-                { sessionStorage.getItem('role') == "DRIVER" ?
+                { sessionStorage.getItem('role') === "DRIVER" ?
                 <Menu.Item key="manage-vehicle" icon={<CarOutlined />}>
                     <Link to="/dashboard/manage-vehicle">Manage Vehicle</Link>
                 </Menu.Item>

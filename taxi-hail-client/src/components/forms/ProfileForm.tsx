@@ -7,7 +7,6 @@ import {
 import {useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import SessionManager from "../auth/SessionManager";
 import moment from "moment";
 
 const formItemLayout = {

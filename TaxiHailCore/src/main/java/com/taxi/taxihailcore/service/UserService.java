@@ -63,7 +63,7 @@ public class UserService {
             return ResponseEntity.status(HttpStatus.OK).body("User update successful");
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User update failed\nException: " + e.toString());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User update failed\nException: " + e);
         }
     }
 

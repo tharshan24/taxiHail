@@ -5,7 +5,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,7 +22,7 @@ public class PaymentMode {
     @Column(name = "payment_short", length = 8, unique = true, nullable = false)
     private String paymentShort;
 
-    @Column(name = "description", length = 256, nullable = true)
+    @Column(name = "description", length = 256)
     private String description;
 
     @Column(name = "status", length = 1, nullable = false)

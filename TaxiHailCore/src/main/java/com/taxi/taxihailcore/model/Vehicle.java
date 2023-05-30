@@ -9,7 +9,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.UUID;
 
 @Data
@@ -36,7 +35,7 @@ public class Vehicle {
     @JoinColumn(name = "driver", referencedColumnName = "user_id")
     private User driver;
 
-    @Column(name = "status", length = 1, unique = false, nullable = false)
+    @Column(name = "status", length = 1, nullable = false)
     private int status;
 
     @CreationTimestamp

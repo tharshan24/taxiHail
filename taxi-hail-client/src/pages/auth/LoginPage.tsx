@@ -5,7 +5,6 @@ import { LoginForm } from "../../components/forms/LoginForm";
 const LoginPage: React.FC = () => {
 
 
-
     return (
         <Row
             justify="center"

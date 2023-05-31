@@ -4,7 +4,7 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import SignUpPage from "../../pages/auth/SignUpPage";
 import LoginPage from "../../pages/auth/LoginPage";
 import DashboardPage from "../../pages/dashboard/DashboardPage";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import PassengerHomePage from "../../pages/uiComponents/PassengerHomePage";
 import ProfilePage from "../../pages/uiComponents/ProfilePage";
 import DriverHomePage from "../../pages/uiComponents/DriverHomePage";
@@ -17,9 +17,12 @@ import ManageVehiclePage from "../../pages/uiComponents/ManageVehiclePage";
 
 export const AppRouter: React.FC = () => {
 
-    let getRole = () => {
-        return sessionStorage.getItem("role");
-    }
+    const [role, setRole] = useState<string | null>(null);
+
+    useEffect(() => {
+        let storedRole = sessionStorage.getItem("role");
+        setRole(storedRole);
+    }, []);
 
     const protectedLayout = (
         <RequireAuth>
@@ -43,11 +46,14 @@ export const AppRouter: React.FC = () => {
                 <Route path="dashboard" element={ protectedLayout }>
                     <Route
                         path="home"
-                        element={getRole() === "PASSENGER" ? <PassengerHomePage /> : <DriverHomePage />}
+                        element={ role === "PASSENGER" ? <PassengerHomePage /> : <DriverHomePage /> }
                     />
                     <Route path="profile" element={<ProfilePage />} />
                     <Route path="update-password" element={<UpdatePasswordPage />} />
-                    <Route path="manage-vehicle" element={getRole() === "DRIVER" ? <ManageVehiclePage /> : <RootRedirect /> } />
+                    <Route
+                        path="manage-vehicle"
+                        element={ role === "DRIVER" ? <ManageVehiclePage /> : <RootRedirect /> }
+                    />
                 </Route>
                 <Route path="/*" element={ <RootRedirect /> }/>
             </Routes>

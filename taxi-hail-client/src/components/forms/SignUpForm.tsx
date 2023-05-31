@@ -47,6 +47,7 @@ const SignUpForm: React.FC = () => {
         axios.post('http://localhost:8080/auth/register', values)
             .then(response => {
                 if (response.data.status === 200) {
+                    alert(response.data.message);
                     return SessionManager(response.data); // Return the promise from SessionManager
                 } else {
                     sessionStorage.clear();
@@ -54,11 +55,13 @@ const SignUpForm: React.FC = () => {
                 }
             })
             .then(() => {
+                console.log(sessionStorage.getItem("role"));
                 navigate('/dashboard/home');
             })
             .catch(error => {
                 sessionStorage.clear();
-                alert(error);
+                console.log(error)
+                alert(error.data.message);
             });
     };
 

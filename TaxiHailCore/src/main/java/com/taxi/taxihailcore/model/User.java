@@ -36,10 +36,6 @@ public class User implements UserDetails {
     @Column(name = "password", length = 256, nullable = false)
     private String password;
 
-    @JsonIgnore
-    @Column(name = "salt", length = 64, nullable = false)
-    private String salt;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "role", length = 12, nullable = false, updatable = false)
     private Role role;

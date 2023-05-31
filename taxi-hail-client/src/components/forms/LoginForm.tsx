@@ -19,6 +19,7 @@ export const LoginForm: React.FC = () => {
             .post('http://localhost:8080/auth/authenticate', values)
             .then(response => {
                 if (response.data.status === 200) {
+                    alert(response.data.message);
                     return SessionManager(response.data); // Return the promise from SessionManager
                 } else {
                     sessionStorage.clear();
@@ -26,6 +27,7 @@ export const LoginForm: React.FC = () => {
                 }
             })
             .then(() => {
+                console.log(sessionStorage.getItem("role"));
                 navigate('/dashboard/home');
             })
             .catch(error => {

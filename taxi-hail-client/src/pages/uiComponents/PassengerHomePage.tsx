@@ -2,16 +2,45 @@ import React, { useState, useEffect } from 'react';
 import { Form, Select, Button, Spin, message } from 'antd';
 import axios from 'axios';
 
-const { Option } = Select
+const { Option } = Select;
+
+let pickupLocations = [
+    {
+        "latitude": 6.897547175256828,
+        "longitude": 79.85352970947218
+    },
+    {
+        "latitude": 6.9006237548655545,
+        "longitude": 79.85431828154104
+    },
+    {
+        "latitude": 6.901038408628013,
+        "longitude": 79.8555960241876
+    }
+]
+
+let destinationLocations = [
+    {
+        "latitude": 6.9012910120150766,
+        "longitude": 79.85616477132682
+    },
+    {
+        "latitude": 6.901047883144368,
+        "longitude": 79.85337531765845
+    },
+    {
+        "latitude": 6.900564889362727,
+        "longitude": 79.85297139350564
+    }
+]
 
 const PassengerHomePage: React.FC = () => {
-
     const [vehicleTypes, setVehicleTypes] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [reqLoading, setReqLoading] = useState(false);
     const [form] = Form.useForm();
 
     useEffect(() => {
-        // Fetch vehicle types from the backend
         fetchVehicleTypes();
     }, []);
 
@@ -27,19 +56,18 @@ const PassengerHomePage: React.FC = () => {
             setVehicleTypes(data);
             setLoading(false);
         } catch (error) {
+            setLoading((false))
+            alert(error);
             console.error(error);
         }
     };
 
     const handleRequestRide = async (values: any) => {
-        setLoading(true);
+
+        setReqLoading(true);
         try {
-            // Make API request to backend for ride request
             const response = await axios.post('http://localhost:8080/rides/request', values);
             if (response.data.success) {
-                // Navigate to current rides page
-                // Replace the path below with the appropriate path for your current rides page
-                // navigate('/current-rides');
                 message.success('Ride requested successfully!');
             } else {
                 message.error('Failed to request ride. Please try again.');
@@ -49,13 +77,11 @@ const PassengerHomePage: React.FC = () => {
             console.error(error);
             message.error('An error occurred. Please try again.');
         } finally {
-            setLoading(false);
+            setReqLoading(false);
         }
     };
 
     const handleCancelRequest = () => {
-        // Logic to cancel the ride request
-        // Implement the necessary logic to cancel the request or stop ongoing processes
         form.resetFields();
         message.info('Ride request cancelled.');
     };
@@ -65,7 +91,7 @@ const PassengerHomePage: React.FC = () => {
             <Form form={form} onFinish={handleRequestRide}>
                 <Form.Item label="Vehicle Type" name="vehicleType" rules={[{ required: true, message: 'Please select a vehicle type' }]}>
                     <Select placeholder="Select vehicle type">
-                        {vehicleTypes.map((vehicleType:any) => (
+                        {vehicleTypes.map((vehicleType: any) => (
                             <Option key={vehicleType.vehicleTypeId} value={vehicleType.vehicleTypeId}>
                                 {vehicleType.vehicleType + " -> \"" + vehicleType.description + "\""}
                             </Option>
@@ -73,17 +99,25 @@ const PassengerHomePage: React.FC = () => {
                     </Select>
                 </Form.Item>
                 <Form.Item label="Pickup Location" name="pickupLocation" rules={[{ required: true, message: 'Please select a pickup location' }]}>
-                    <Select placeholder="Select pickup location">
-                        {/* Generate and map random pickup locations */}
+                    <Select placeholder="Select pickup location" >
+                        {pickupLocations.map((pickupLocation: any) => (
+                            <Option value={`${pickupLocation.latitude},${pickupLocation.longitude}`}>
+                                {`${pickupLocation.latitude},${pickupLocation.longitude}`}
+                            </Option>
+                        ))}
                     </Select>
                 </Form.Item>
                 <Form.Item label="Destination Location" name="destinationLocation" rules={[{ required: true, message: 'Please select a destination location' }]}>
-                    <Select placeholder="Select destination location">
-                        {/* Generate and map random destination locations */}
+                    <Select placeholder="Select destination location" >
+                        {destinationLocations.map((destinationLocation: any) => (
+                            <Option value={`${destinationLocation.latitude},${destinationLocation.longitude}`}>
+                                {`${destinationLocation.latitude},${destinationLocation.longitude}`}
+                            </Option>
+                        ))}
                     </Select>
                 </Form.Item>
                 <Form.Item>
-                    {loading ? (
+                    {reqLoading ? (
                         <div className="spin-container">
                             <Spin />
                             <Button onClick={handleCancelRequest}>Cancel</Button>

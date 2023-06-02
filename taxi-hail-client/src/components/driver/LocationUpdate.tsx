@@ -18,6 +18,7 @@ const generateRandomLongitude = () => {
 
 export const LocationUpdate = () => {
     const [vehicleId, setVehicleId] = useState(sessionStorage.getItem('vehicleId'))
+    const [vehicleTypeId, setVehicleTypeId] = useState(sessionStorage.getItem('vehicleTypeId'))
 
     useEffect(() => {
 
@@ -32,7 +33,9 @@ export const LocationUpdate = () => {
                 })
                     .then(response => {
                         sessionStorage.setItem("vehicleId", response.data.vehicleId)
+                        sessionStorage.setItem("vehicleTypeId", response.data.vehicleId)
                         setVehicleId(response.data.vehicleId);
+                        setVehicleId(response.data.vehicleTypeId);
                         console.log('Request sent successfully');
                     })
                     .catch(error => {
@@ -52,6 +55,7 @@ export const LocationUpdate = () => {
                 const data = {
                     driver: sessionStorage.getItem("userId"),
                     vehicle: sessionStorage.getItem("vehicleId"),
+                    vehicleType: sessionStorage.getItem("vehicleTypeId"),
                     location: `${generateRandomLatitude()},${generateRandomLongitude()}`,
                     inRide: sessionStorage.getItem("ride") ? 1 : 0,
                     ride: sessionStorage.getItem("ride"),

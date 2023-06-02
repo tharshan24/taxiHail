@@ -34,7 +34,7 @@ public class Ride {
     private BigDecimal destinationLocationLongitude;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "driver", nullable = false)
+    @JoinColumn(name = "driver")
     private User driver;
 
     @Column(name = "status", length = 1, nullable = false)

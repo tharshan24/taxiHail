@@ -112,10 +112,13 @@ const ProfileForm: React.FC = () => {
                 }
             })
             .catch(error => {
-                sessionStorage.clear();
                 alert(error.response.data);
                 console.log(error.response)
-                navigate('/auth/login');
+                if (error.response.status !== 400)
+                {
+                    sessionStorage.clear();
+                    navigate('/auth/login');
+                }
             });
     };
 

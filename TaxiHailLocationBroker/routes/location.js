@@ -6,10 +6,10 @@ const router = express.Router();
 router.post("/updateLocation" , authenticator,
     (req, res) => {
 
-        const { driver, vehicle, location, inRide, ride, status, createdAt } = req.body;
+        const { driver, vehicle, vehicleType, location, inRide, ride, status, createdAt } = req.body;
         const [locationLatitude, locationLongitude] = location.split(',');
 
-        updateLocation(driver, vehicle, parseFloat(locationLatitude), parseFloat(locationLongitude), inRide, ride, status, createdAt)
+        updateLocation(driver, vehicle, vehicleType, parseFloat(locationLatitude), parseFloat(locationLongitude), inRide, ride, status, createdAt)
             .then(() => {
                 res.status(200).json({ message: 'Location updated successfully.' });
             })

@@ -66,7 +66,7 @@ const PassengerHomePage: React.FC = () => {
 
         setReqLoading(true);
         try {
-            const response = await axios.post('http://localhost:8080/rides/request', values);
+            const response = await axios.post('http://localhost:8080/ride/request', values);
             if (response.data.success) {
                 message.success('Ride requested successfully!');
             } else {

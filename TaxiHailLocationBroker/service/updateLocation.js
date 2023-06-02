@@ -1,11 +1,12 @@
 const {produceMessage} = require("../util/kafkaproducer");
-const updateLocation = (driver, vehicle, locationLatitude, locationLongitude, inRide, ride, status, createdAt) => {
+const updateLocation = (driver, vehicle, vehicleType, locationLatitude, locationLongitude, inRide, ride, status, createdAt) => {
 
     return new Promise((resolve, reject) => {
 
         const message = {
             driver,
             vehicle,
+            vehicleType,
             locationLatitude,
             locationLongitude,
             inRide,

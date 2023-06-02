@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class vehicleExceptionHandler {
+public class CommonExceptionHandler {
 
     @ExceptionHandler(VehicleException.class)
-    public ResponseEntity<String> handleUserRegistrationException(UserRegistrationException ex) {
+    public ResponseEntity<String> handleCommonException(UserRegistrationException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }

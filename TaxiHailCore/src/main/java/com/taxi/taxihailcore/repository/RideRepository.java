@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -17,5 +18,5 @@ public interface RideRepository extends JpaRepository<Ride, UUID> {
     void softDelete(@Param("rideId") UUID rideId);
 
     @Query("SELECT rr FROM Ride rr WHERE rr.driver = :driverId AND rr.status IN (1, 2, 3)")
-    List<Ride> findByDriverAndStatus(@Param("driverId") UUID driverId);
+    Optional<Ride> findByDriverAndStatus(@Param("driverId") UUID driverId);
 }

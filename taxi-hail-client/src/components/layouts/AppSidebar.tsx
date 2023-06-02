@@ -23,11 +23,13 @@ const AppSidebar: React.FC = () => {
                     <Link to="/dashboard/update-password">Change Password</Link>
                 </Menu.Item>
                 { sessionStorage.getItem('role') === "DRIVER" ?
-                <Menu.Item key="manage-vehicle" icon={<CarOutlined />}>
-                    <Link to="/dashboard/manage-vehicle">Manage Vehicle</Link>
-                </Menu.Item>
+                    <Menu.Item key="manage-vehicle" icon={<CarOutlined />}>
+                        <Link to="/dashboard/manage-vehicle">Manage Vehicle</Link>
+                    </Menu.Item>
                     :
-                    null
+                    <Menu.Item key="Current Rides" icon={<CarOutlined />}>
+                        <Link to="/dashboard/current-rides">Current Rides</Link>
+                    </Menu.Item>
                 }
             </Menu>
         </Sider>

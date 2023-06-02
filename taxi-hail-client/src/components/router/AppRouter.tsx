@@ -54,6 +54,10 @@ export const AppRouter: React.FC = () => {
                         path="manage-vehicle"
                         element={ role === "DRIVER" ? <ManageVehiclePage /> : <RootRedirect /> }
                     />
+                    <Route
+                        path="current-rides"
+                        element={ role === "PASSENGER" ? <ManageVehiclePage /> : <RootRedirect /> }
+                    />
                 </Route>
                 <Route path="/*" element={ <RootRedirect /> }/>
             </Routes>

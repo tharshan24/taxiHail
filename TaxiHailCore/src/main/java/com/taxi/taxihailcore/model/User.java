@@ -77,6 +77,12 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
     private List<Ride> driverRides;
 
+    @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
+    private List<RideRequest> rideRequests;
+
+    @OneToMany(mappedBy = "vehicleType", cascade = CascadeType.ALL)
+    private List<Vehicle> vehicles;
+
     @OneToMany(mappedBy = "authUser")
     private List<Token> tokens;
 

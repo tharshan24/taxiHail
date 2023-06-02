@@ -1,0 +1,72 @@
+point: 6.8991744,79.8544396
+
+up: 6.9018405,79.853514
+down: 6.8962791,79.8555881
+left: 6.898546,79.8527541
+right: 6.8993696,79.8561938
+
+
+latRange: 6.8962791, 6.9018405
+longRange: 79.8527541, 79.8561938
+
+#________________
+#ride plan
+#________________
+
+passenger_request_ride:
+  post_req_to-server:
+  check_for_any_pending_rides_from_user:
+    if_exists: return_error_and_navigate_to_current_rides
+    if_not:
+      insert_into_ride_table:
+      request_location_server_for_active_drivers:
+        if_not: return_no_drivers
+        if_exists:
+          get_top_5_drivers:
+          send_to_profile_server:
+            insert_into_ride_request_table_for_drivers:
+            return_waiting_for_drivers_and_navigate_to_rides:
+
+passenger_in_current_rides:
+  in_set_interval:
+    request_for_current_rides:
+      if_not: show_no_active_rides
+      if_exists: show_ride
+
+driver_dashboard:
+  check_session_storage_for_inRide:
+    if_yes:
+      request_for_ride_with_rideId_form_sessionStorage_userId:
+        if_not: show_error_incorrect_ride_and_rest_rideId_and_inRide_in_sessionStorage
+        if_yes:
+          show_ride_details:
+            case_driver_accepted:
+              option_to_change_to_inRide:
+                update_ride_status_to_inRide
+            case_inRide:
+              option_to_change_to_completed:
+                update_ride_status_to_complete
+                update_payment_as_paid
+    if_not:
+      in_set_interval:
+        request_for_pending_request:
+          if_not: show_no_pending_requests
+          if_exists:
+            show_requests:
+            rejects:
+              send_request_to_update_rideRequests_table_status_as_0
+            accepts:
+              begin_transaction:
+                get_the_ride:
+                check_status_pending:
+                  if_not: return_error_and_show_ride_missed_or_cancelled
+                  if_yes:
+                    assign_user_as_driver_and_change_status_to_2_for_ride
+                    change_rideRequest_table_rows_status
+                    insert_into_payment_with_random_payment
+              end_transaction:
+                    return_success_message_accepted
+                    change_session_storage_inRide_as_1
+                    refresh
+
+

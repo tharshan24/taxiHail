@@ -6,6 +6,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -38,7 +39,7 @@ public class Ride {
     private User driver;
 
     @Column(name = "status", length = 1, nullable = false)
-    private int status;
+    private int status; // 0: cancelled, 1: pending, 2: driver_connected, 3: in_ride, 4: completed
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false, nullable = false)
@@ -51,6 +52,9 @@ public class Ride {
     @OneToOne(mappedBy = "ride", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private Payment payment;
+
+    @OneToMany(mappedBy = "ride", cascade = CascadeType.ALL)
+    private List<RideRequest> rideRequests;
 
     public UUID getRideId() {
         return rideId;

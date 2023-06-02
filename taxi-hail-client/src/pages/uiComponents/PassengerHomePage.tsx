@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Select, Button, Spin, message } from 'antd';
 import axios from 'axios';
+import {useNavigate} from "react-router-dom";
 
 const { Option } = Select;
 
@@ -39,13 +40,48 @@ const PassengerHomePage: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [reqLoading, setReqLoading] = useState(false);
     const [form] = Form.useForm();
+    const navigate = useNavigate();
+
+    useEffect( () => {
+        checkRide();
+    })
 
     useEffect(() => {
         fetchVehicleTypes();
     }, []);
 
+    useEffect(() => {
+        const handlePageLeave = (event: BeforeUnloadEvent) => {
+            if (reqLoading) {
+                event.preventDefault();
+                const confirmed = window.confirm('Are you sure you want to leave?');
+                if (confirmed) {
+                    handleCancelRequest();
+                    message.info('Ride request cancelled.');
+                    navigate('/'); // Replace with the appropriate path for navigation
+                } else {
+                    event.returnValue = '';
+                }
+            }
+        };
+
+        window.addEventListener('beforeunload', handlePageLeave);
+
+        return () => {
+            window.removeEventListener('beforeunload', handlePageLeave);
+        };
+    }, [reqLoading]);
+
+    const checkRide = async () => {
+
+    }
+
     const fetchVehicleTypes = async () => {
         try {
+            console.log(sessionStorage.getItem("role"))
+            if(sessionStorage.getItem("role") !== "PASSENGER") {
+                navigate("/");
+            }
             const token = sessionStorage.getItem('accessToken');
             const response = await axios.get('http://localhost:8080/vehicle_type/get_vehicle_types', {
                 headers: {
@@ -56,7 +92,7 @@ const PassengerHomePage: React.FC = () => {
             setVehicleTypes(data);
             setLoading(false);
         } catch (error) {
-            setLoading((false))
+            setLoading(false)
             alert(error);
             console.error(error);
         }
@@ -76,7 +112,6 @@ const PassengerHomePage: React.FC = () => {
         } catch (error) {
             console.error(error);
             message.error('An error occurred. Please try again.');
-        } finally {
             setReqLoading(false);
         }
     };

@@ -22,4 +22,7 @@ public interface RideRepository extends JpaRepository<Ride, UUID> {
 
     @Query("SELECT rr FROM Ride rr WHERE rr.passenger.userId = :passengerId AND rr.status IN (1, 2, 3)")
     Optional<List<Ride>> findByPassengerAndStatus(@Param("passengerId") UUID passengerId);
+
+    @Query("SELECT rr FROM Ride rr JOIN RideDriver rd WHERE rd.driver.userId = :driverId AND rd.status = 1 AND rr.status IN (1, 2, 3)")
+    Optional<List<Ride>> findRideRequests(@Param("driverId") UUID driverId);
 }

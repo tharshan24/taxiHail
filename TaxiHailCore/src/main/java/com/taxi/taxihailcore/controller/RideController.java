@@ -60,4 +60,12 @@ public class RideController {
         Role role = Role.valueOf((String) httpServletRequest.getAttribute("ROLE"));
         return ResponseEntity.ok(rideService.getCurrentRides(userId, role));
     }
+
+    @GetMapping("ride_requests")
+    public ResponseEntity<List<RideViewDTO>> getRideRequests(
+            @NotNull HttpServletRequest httpServletRequest
+    ) {
+        UUID userId = UUID.fromString((String) httpServletRequest.getAttribute("userId"));
+        return ResponseEntity.ok(rideService.getRideRequests(userId));
+    }
 }

@@ -161,4 +161,34 @@ public class RideService {
         return rideViewDTOList;
     }
 
+    public List<RideViewDTO> getRideRequests(UUID userId) {
+        List<RideViewDTO> rideViewDTOList = new ArrayList<>();
+        List<Ride> rideList = Collections.emptyList();
+
+        Optional<List<Ride>> rideRequests = rideRepository.findRideRequests(userId);
+        if (rideRequests.isPresent()) {
+            rideList = rideRequests.get();
+        }
+
+        for (Ride ride : rideList) {
+            RideViewDTO rideViewDTO = new RideViewDTO();
+
+            rideViewDTO.setRideId(ride.getRideId());
+            rideViewDTO.setPassenger(ride.getPassenger().getFirstName());
+            rideViewDTO.setPickupLocationLatitude(ride.getPickupLocationLatitude());
+            rideViewDTO.setPickupLocationLongitude(ride.getPickupLocationLongitude());
+            rideViewDTO.setDestinationLocationLatitude(ride.getDestinationLocationLatitude());
+            rideViewDTO.setDestinationLocationLongitude(ride.getDestinationLocationLongitude());
+            rideViewDTO.setDriver(ride.getDriver().getFirstName());
+            rideViewDTO.setVehicleType(ride.getDriver().getVehicle().getVehicleType().getVehicleType());
+            rideViewDTO.setVehicleNo(ride.getDriver().getVehicle().getVehicleNo());
+            rideViewDTO.setAmount(ride.getPayment().getPaymentAmount());
+            rideViewDTO.setStatus(ride.getStatus());
+            rideViewDTO.setCreatedAt(ride.getCreatedAt());
+            rideViewDTO.setUpdatedAt(ride.getUpdatedAt());
+
+            rideViewDTOList.add(rideViewDTO);
+        }
+        return rideViewDTOList;
+    }
 }

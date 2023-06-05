@@ -44,10 +44,12 @@ public class RideController {
         Optional<User> optionalUser = userRepository.findByUserId(userId);
         Optional<Ride> optionalRide = rideRepository.findByDriverAndStatus(userId);
 
+        final String authHeader = httpServletRequest.getHeader("Authorization");
+
         if(optionalRide.isPresent()){
             throw new RuntimeException("Already have an active ride !");
         }
 
-        return ResponseEntity.ok(rideService.rideRequest(rideRequestDTo, optionalUser.get()));
+        return ResponseEntity.ok(rideService.rideRequest(rideRequestDTo, optionalUser.get(), authHeader));
     }
 }

@@ -17,7 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "ride_requests")
-public class RideRequest {
+public class RideDriver {
 
     @Id
     @Column(name = "ride_request_id", columnDefinition = "UUID default gen_random_uuid()")

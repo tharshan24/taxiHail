@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Select, Button, Spin, message } from 'antd';
 import axios from 'axios';
-import {useNavigate} from "react-router-dom";
+import {Navigate, useNavigate} from "react-router-dom";
 
 const { Option } = Select;
 
@@ -103,10 +103,13 @@ const PassengerHomePage: React.FC = () => {
         setReqLoading(true);
         try {
             const response = await axios.post('http://localhost:8080/ride/request', values);
-            if (response.data.success) {
+            if (response.data.statusCode == 200) {
                 message.success('Ride requested successfully!');
+                navigate("/dashboard/current-rides");
             } else {
+                console.log(response.data)
                 message.error('Failed to request ride. Please try again.');
+                setReqLoading(false);
             }
             form.resetFields();
         } catch (error) {

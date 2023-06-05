@@ -62,7 +62,7 @@ public class Ride {
     private Payment payment;
 
     @OneToMany(mappedBy = "ride", cascade = CascadeType.ALL)
-    private List<RideRequest> rideRequests;
+    private List<RideDriver> rideDrivers;
 
     public UUID getRideId() {
         return rideId;

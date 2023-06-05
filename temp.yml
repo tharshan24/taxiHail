@@ -37,7 +37,7 @@ driver_dashboard:
   check_session_storage_for_inRide:
     if_yes:
       request_for_ride_with_rideId_form_sessionStorage_userId:
-        if_not: show_error_incorrect_ride_and_rest_rideId_and_inRide_in_sessionStorage
+        if_not: show_error_incorrect_ride_and_reset_rideId_and_inRide_in_sessionStorage
         if_yes:
           show_ride_details:
             case_driver_accepted:

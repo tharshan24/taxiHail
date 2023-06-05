@@ -17,9 +17,9 @@ public interface RideRepository extends JpaRepository<Ride, UUID> {
     @Query("UPDATE Ride r SET r.status = 0 WHERE r.rideId = :rideId")
     void softDelete(@Param("rideId") UUID rideId);
 
-    @Query("SELECT rr FROM Ride rr WHERE rr.driver = :driverId AND rr.status IN (1, 2, 3)")
-    Optional<List<Ride>> findByDriverAndStatus(UUID driverId);
+    @Query("SELECT rr FROM Ride rr WHERE rr.driver.userId = :driverId AND rr.status IN (1, 2, 3)")
+    Optional<List<Ride>> findByDriverAndStatus(@Param("driverId") UUID driverId);
 
-    @Query("SELECT rr FROM Ride rr WHERE rr.passenger = :passengerId AND rr.status IN (1, 2, 3)")
-    Optional<List<Ride>> findByPassengerAndStatus(UUID passengerId);
+    @Query("SELECT rr FROM Ride rr WHERE rr.passenger.userId = :passengerId AND rr.status IN (1, 2, 3)")
+    Optional<List<Ride>> findByPassengerAndStatus(@Param("passengerId") UUID passengerId);
 }

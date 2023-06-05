@@ -1,11 +1,11 @@
 import React from 'react';
-import { Layout } from 'antd';
+import {Layout} from 'antd';
 
-const { Footer } = Layout;
+const {Footer} = Layout;
 
 const AppFooter = () => {
 
-    const footerStyle : React.CSSProperties = {
+    const footerStyle: React.CSSProperties = {
         backgroundColor: '#c6c6c6',
         padding: '20px',
         textAlign: 'center',

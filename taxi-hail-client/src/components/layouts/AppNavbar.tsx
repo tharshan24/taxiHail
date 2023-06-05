@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import { Avatar, Dropdown, Menu } from 'antd';
-import { UserOutlined, LogoutOutlined } from '@ant-design/icons';
+import {Avatar, Dropdown, Menu} from 'antd';
+import {UserOutlined, LogoutOutlined} from '@ant-design/icons';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 
@@ -16,17 +16,16 @@ const AppNavbar: React.FC = () => {
         })
             .then(response => {
                 // Handle the response from the server
-                if(response.data.status === 200) {
+                if (response.data.status === 200) {
                     sessionStorage.clear();
                     alert(response.data.message);
                     navigate('/auth/login');
-                }
-                else {
+                } else {
                     sessionStorage.clear();
                     alert(response.data.message)
                     setTimeout(() => {
                         navigate('/auth/login');
-                    },2000)
+                    }, 2000)
                 }
             })
             .catch(error => {
@@ -34,14 +33,14 @@ const AppNavbar: React.FC = () => {
                 alert(error);
                 setTimeout(() => {
                     navigate('/auth/login');
-                },2000)
+                }, 2000)
             });
     };
 
     const menu = (
         <Menu onClick={handleLogout}>
             <Menu.Item key="logout" style={{}}>
-                <LogoutOutlined style={{ color: '#000' }}/>
+                <LogoutOutlined style={{color: '#000'}}/>
                 Logout
             </Menu.Item>
         </Menu>
@@ -49,10 +48,10 @@ const AppNavbar: React.FC = () => {
 
     return (
         <div className="profile-avatar-container">
-            <Dropdown overlay={menu} placement="bottomRight" >
+            <Dropdown overlay={menu} placement="bottomRight">
                 <Avatar
                     size="large"
-                    icon={<UserOutlined />}
+                    icon={<UserOutlined/>}
                     alt="Profile Image"
                 />
             </Dropdown>

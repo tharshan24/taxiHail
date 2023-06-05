@@ -11,12 +11,12 @@ import moment from "moment";
 
 const formItemLayout = {
     labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
+        xs: {span: 24},
+        sm: {span: 8},
     },
     wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
+        xs: {span: 24},
+        sm: {span: 16},
     },
 };
 
@@ -87,7 +87,7 @@ const ProfileForm: React.FC = () => {
     }, []);
 
     if (loading) {
-        return <Spin size="large" />;
+        return <Spin size="large"/>;
     }
 
     const onFinish = (values: any) => {
@@ -99,12 +99,11 @@ const ProfileForm: React.FC = () => {
         })
             .then(response => {
                 // Handle the response from the server
-                if(response.data.statusCodeValue === 200) {
+                if (response.data.statusCodeValue === 200) {
                     alert(response.data.body);
                     setUserData({...userData, ...values})
                     // navigate('/dashboard/profile');
-                }
-                else {
+                } else {
                     sessionStorage.clear();
                     alert(response.data)
                     console.log(response)
@@ -114,8 +113,7 @@ const ProfileForm: React.FC = () => {
             .catch(error => {
                 alert(error.response.data);
                 console.log(error.response)
-                if (error.response.status !== 400)
-                {
+                if (error.response.status !== 400) {
                     sessionStorage.clear();
                     navigate('/auth/login');
                 }
@@ -124,8 +122,8 @@ const ProfileForm: React.FC = () => {
 
     const prefixSelector = (
         <Form.Item name="prefix" noStyle>
-            <Select style={{ width: 70 }}>
-                <span style={{ marginRight: '8px' }}>+94</span>
+            <Select style={{width: 70}}>
+                <span style={{marginRight: '8px'}}>+94</span>
             </Select>
         </Form.Item>
     );
@@ -141,12 +139,12 @@ const ProfileForm: React.FC = () => {
             ref={formRef}
             name="update-profile"
             onFinish={onFinish}
-            initialValues={{ ...userData ,prefix: '94' }}
-            style={{ maxWidth: 600 }}
+            initialValues={{...userData, prefix: '94'}}
+            style={{maxWidth: 600}}
             scrollToFirstError
         >
 
-            <div style={{textAlign:"left"}}>
+            <div style={{textAlign: "left"}}>
                 <Row gutter={32}>
                     <Col span={10}>
                         <Form.Item label="User ID">
@@ -188,18 +186,18 @@ const ProfileForm: React.FC = () => {
                 name="firstName"
                 label="First Name"
                 tooltip="Enter your given name"
-                rules={[{ required: true, message: 'Please input your first name!' }]}
+                rules={[{required: true, message: 'Please input your first name!'}]}
             >
-                <Input />
+                <Input/>
             </Form.Item>
 
             <Form.Item
                 name="lastName"
                 label="Last Name"
                 tooltip="Enter your sir name"
-                rules={[{ required: false, message: 'Please input your last name!' }]}
+                rules={[{required: false, message: 'Please input your last name!'}]}
             >
-                <Input />
+                <Input/>
             </Form.Item>
 
             <Form.Item
@@ -216,7 +214,7 @@ const ProfileForm: React.FC = () => {
                     },
                 ]}
             >
-                <Input />
+                <Input/>
             </Form.Item>
 
             <Form.Item
@@ -233,11 +231,11 @@ const ProfileForm: React.FC = () => {
                     }
                 ]}
             >
-                <Input addonBefore={prefixSelector} style={{ width: '100%' }} />
+                <Input addonBefore={prefixSelector} style={{width: '100%'}}/>
             </Form.Item>
 
             <Form.Item {...tailFormItemLayout}>
-                <Button type="primary" htmlType="submit" style={{ marginRight: '8px' }}>
+                <Button type="primary" htmlType="submit" style={{marginRight: '8px'}}>
                     Update
                 </Button>
                 <Button htmlType="button" onClick={onReset}>

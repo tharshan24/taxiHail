@@ -1,4 +1,4 @@
-import { Col, Row } from 'antd';
+import {Col, Row} from 'antd';
 import SignUpForm from "../../components/forms/SignUpForm";
 import React from "react";
 
@@ -22,8 +22,8 @@ const SignUpPage: React.FC = () => {
                         boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)', // Add a subtle shadow
                     }}
                 >
-                    <h1 style={{ textAlign: 'center', marginBottom: '24px', color: '#1890ff' }}>Sign Up</h1>
-                    <SignUpForm />
+                    <h1 style={{textAlign: 'center', marginBottom: '24px', color: '#1890ff'}}>Sign Up</h1>
+                    <SignUpForm/>
                 </div>
             </Col>
         </Row>

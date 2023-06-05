@@ -5,7 +5,7 @@ const ProfilePage: React.FC = () => {
 
     return (
         <>
-            <ProfileForm />
+            <ProfileForm/>
         </>
     );
 };

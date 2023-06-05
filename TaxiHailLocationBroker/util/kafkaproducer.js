@@ -1,4 +1,4 @@
-const { Kafka } = require('kafkajs');
+const {Kafka} = require('kafkajs');
 
 // Set up Kafka producer configuration
 const kafka = new Kafka({

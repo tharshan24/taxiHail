@@ -2,12 +2,12 @@
 
 import {Button, Form, FormInstance, Input, Select, Spin} from 'antd';
 import {CarOutlined} from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import axios from "axios";
 import React, {useEffect, useState} from "react";
 
 
-const { Option } = Select;
+const {Option} = Select;
 export const AddVehicleForm: React.FC = () => {
 
     const formRef = React.useRef<FormInstance>(null);
@@ -29,19 +29,19 @@ export const AddVehicleForm: React.FC = () => {
                 }
             });
             const data = response.data.body;
-                setVehicleTypes(data);
-                setLoading(false)
+            setVehicleTypes(data);
+            setLoading(false)
         } catch (error) {
             console.error(error);
         }
     };
 
     const tailLayout = {
-        wrapperCol: { offset: 8, span: 16 },
+        wrapperCol: {offset: 8, span: 16},
     };
 
     const onFinish = (values: any) => {
-        values.vehicleType = {vehicleTypeId : values.vehicleType}
+        values.vehicleType = {vehicleTypeId: values.vehicleType}
         const token = sessionStorage.getItem('accessToken');
         axios
             .post('http://localhost:8080/vehicle/add_vehicle', values, {
@@ -69,7 +69,7 @@ export const AddVehicleForm: React.FC = () => {
     };
 
     if (loading) {
-        return <Spin size="large" />;
+        return <Spin size="large"/>;
     }
 
     return (
@@ -92,7 +92,7 @@ export const AddVehicleForm: React.FC = () => {
                     }
                 >
                     <Select placeholder="Select Vehicle Type">
-                        {vehicleTypes.map((vehicleType:any) => (
+                        {vehicleTypes.map((vehicleType: any) => (
                             <Option key={vehicleType.vehicleTypeId} value={vehicleType.vehicleTypeId}>
                                 {vehicleType.vehicleType + " -> \"" + vehicleType.description + "\""}
                             </Option>
@@ -103,10 +103,10 @@ export const AddVehicleForm: React.FC = () => {
                 <Form.Item
                     label="Vehicle No"
                     name="vehicleNo"
-                    rules={[{ required: true, message: 'Please input your Vehicle No!' }]}
+                    rules={[{required: true, message: 'Please input your Vehicle No!'}]}
                 >
                     <Input
-                        prefix={<CarOutlined className="site-form-item-icon" />}
+                        prefix={<CarOutlined className="site-form-item-icon"/>}
                         placeholder="XXX-YYYY"
                     />
                 </Form.Item>
@@ -115,7 +115,7 @@ export const AddVehicleForm: React.FC = () => {
                     <Button type="primary" htmlType="submit" className="login-form-button" style={{marginRight: '8px'}}>
                         Add
                     </Button>
-                    <Button htmlType="button" onClick={onReset} >
+                    <Button htmlType="button" onClick={onReset}>
                         Reset
                     </Button>
                 </Form.Item>

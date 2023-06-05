@@ -5,7 +5,7 @@ const UpdatePasswordPage: React.FC = () => {
 
     return (
         <>
-            <UpdatePasswordForm />
+            <UpdatePasswordForm/>
         </>
     );
 };

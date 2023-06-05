@@ -1,12 +1,12 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import {Outlet} from "react-router-dom";
 
 const Middle: React.FC = () => {
 
     return (
         <>
 
-            <Outlet />
+            <Outlet/>
 
         </>
     );

@@ -6,7 +6,7 @@ const DriverHomePage: React.FC = () => {
     const navigate = useNavigate();
 
     console.log(sessionStorage.getItem("role"))
-    if(sessionStorage.getItem("role") !== "DRIVER") {
+    if (sessionStorage.getItem("role") !== "DRIVER") {
         navigate("/")
     }
 

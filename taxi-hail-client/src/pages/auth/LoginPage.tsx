@@ -1,6 +1,6 @@
 import React from 'react';
 import {Col, Row} from 'antd';
-import { LoginForm } from "../../components/forms/LoginForm";
+import {LoginForm} from "../../components/forms/LoginForm";
 
 const LoginPage: React.FC = () => {
 
@@ -24,8 +24,8 @@ const LoginPage: React.FC = () => {
                         boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)', // Add a subtle shadow
                     }}
                 >
-                    <h1 style={{ textAlign: 'center', marginBottom: '24px', color: '#1890ff' }}>Login</h1>
-                    <LoginForm />
+                    <h1 style={{textAlign: 'center', marginBottom: '24px', color: '#1890ff'}}>Login</h1>
+                    <LoginForm/>
                 </div>
             </Col>
         </Row>

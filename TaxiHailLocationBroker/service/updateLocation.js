@@ -27,4 +27,4 @@ const updateLocation = (driver, vehicle, vehicleType, locationLatitude, location
 
 };
 
-module.exports = { updateLocation };
+module.exports = {updateLocation};

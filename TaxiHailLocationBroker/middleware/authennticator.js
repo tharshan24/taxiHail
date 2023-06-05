@@ -16,11 +16,11 @@ const authenticator = (req, res, next) => {
             next();
         } catch (error) {
             // Return an error response if the token is invalid or expired
-            res.status(401).json({ error: 'Invalid or expired token', ex: error });
+            res.status(401).json({error: 'Invalid or expired token', ex: error});
         }
     } else {
         // Return an error response if the bearer token is missing or malformed
-        res.status(401).json({ error: 'Bearer token missing or malformed' });
+        res.status(401).json({error: 'Bearer token missing or malformed'});
     }
 }
 

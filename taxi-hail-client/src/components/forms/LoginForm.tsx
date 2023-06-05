@@ -1,6 +1,6 @@
-import { Button, Form, FormInstance, Input } from 'antd';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import {Button, Form, FormInstance, Input} from 'antd';
+import {LockOutlined, UserOutlined} from '@ant-design/icons';
+import {useNavigate} from 'react-router-dom';
 import axios from "axios";
 import React from "react";
 import SessionManager from "../auth/SessionManager";
@@ -11,7 +11,7 @@ export const LoginForm: React.FC = () => {
     const navigate = useNavigate();
 
     const tailLayout = {
-        wrapperCol: { offset: 8, span: 16 },
+        wrapperCol: {offset: 8, span: 16},
     };
 
     const onFinish = (values: any) => {
@@ -51,21 +51,21 @@ export const LoginForm: React.FC = () => {
                 name="normal_login"
                 ref={formRef}
                 className="login-form"
-                initialValues={{ remember: true }}
+                initialValues={{remember: true}}
                 onFinish={onFinish}
             >
                 <Form.Item
                     name="username"
-                    rules={[{ required: true, message: 'Please input your Username!' }]}
+                    rules={[{required: true, message: 'Please input your Username!'}]}
                 >
-                    <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+                    <Input prefix={<UserOutlined className="site-form-item-icon"/>} placeholder="Username"/>
                 </Form.Item>
                 <Form.Item
                     name="password"
-                    rules={[{ required: true, message: 'Please input your Password!' }]}
+                    rules={[{required: true, message: 'Please input your Password!'}]}
                 >
                     <Input
-                        prefix={<LockOutlined className="site-form-item-icon" />}
+                        prefix={<LockOutlined className="site-form-item-icon"/>}
                         type="password"
                         placeholder="Password"
                     />
@@ -75,7 +75,7 @@ export const LoginForm: React.FC = () => {
                     <Button type="primary" htmlType="submit" className="login-form-button" style={{marginRight: '8px'}}>
                         Log in
                     </Button>
-                    <Button htmlType="button" onClick={onReset} >
+                    <Button htmlType="button" onClick={onReset}>
                         Reset
                     </Button>
                     <div style={{marginTop: '8px'}}>

@@ -19,7 +19,7 @@ spring:
   sql:
     init:
       mode: never
-      data-locations: [classpath:seed_data.sql]
+      data-locations: [ classpath:seed_data.sql ]
 
   jpa:
     hibernate:

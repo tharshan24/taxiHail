@@ -10,12 +10,12 @@ import axios from "axios";
 
 const formItemLayout = {
     labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
+        xs: {span: 24},
+        sm: {span: 8},
     },
     wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
+        xs: {span: 24},
+        sm: {span: 16},
     },
 };
 
@@ -48,11 +48,10 @@ const UpdatePasswordForm: React.FC = () => {
         })
             .then(response => {
                 // Handle the response from the server
-                if(response.data.statusCode === 200) {
+                if (response.data.statusCode === 200) {
                     alert(response.data.body);
                     navigate('/dashboard/update-password');
-                }
-                else {
+                } else {
                     // sessionStorage.clear();
                     alert(response.data)
                     console.log(response)
@@ -83,8 +82,8 @@ const UpdatePasswordForm: React.FC = () => {
             ref={formRef}
             name="register"
             onFinish={onFinish}
-            initialValues={{ prefix: '94' }}
-            style={{ maxWidth: 600 }}
+            initialValues={{prefix: '94'}}
+            style={{maxWidth: 600}}
             scrollToFirstError
         >
 
@@ -98,7 +97,7 @@ const UpdatePasswordForm: React.FC = () => {
                     }
                 ]}
             >
-                <Input.Password />
+                <Input.Password/>
             </Form.Item>
 
             <Form.Item
@@ -115,7 +114,7 @@ const UpdatePasswordForm: React.FC = () => {
                 ]}
                 hasFeedback
             >
-                <Input.Password />
+                <Input.Password/>
             </Form.Item>
 
             <Form.Item
@@ -128,7 +127,7 @@ const UpdatePasswordForm: React.FC = () => {
                         required: true,
                         message: 'Please confirm your password!',
                     },
-                    ({ getFieldValue }) => ({
+                    ({getFieldValue}) => ({
                         validator(_, value) {
                             if (!value || getFieldValue('newPassword') === value) {
                                 return Promise.resolve();
@@ -138,11 +137,11 @@ const UpdatePasswordForm: React.FC = () => {
                     }),
                 ]}
             >
-                <Input.Password />
+                <Input.Password/>
             </Form.Item>
 
             <Form.Item {...tailFormItemLayout}>
-                <Button type="primary" htmlType="submit" style={{ marginRight: '8px' }}>
+                <Button type="primary" htmlType="submit" style={{marginRight: '8px'}}>
                     Update
                 </Button>
                 <Button htmlType="button" onClick={onReset}>

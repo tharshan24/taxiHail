@@ -28,41 +28,41 @@ export const AppRouter: React.FC = () => {
 
     const protectedLayout = (
         <RequireAuth>
-            <DashboardPage />
+            <DashboardPage/>
         </RequireAuth>
     );
 
     const lazyLogin = (
         <LazyLogin>
-            <Middle />
+            <Middle/>
         </LazyLogin>
     )
 
     return (
-         <BrowserRouter>
+        <BrowserRouter>
             <Routes>
-                <Route path="auth" element={ lazyLogin } >
-                    <Route path="login" element={<LoginPage />} />
-                    <Route path="signup" element={<SignUpPage />} />
+                <Route path="auth" element={lazyLogin}>
+                    <Route path="login" element={<LoginPage/>}/>
+                    <Route path="signup" element={<SignUpPage/>}/>
                 </Route>
-                <Route path="dashboard" element={ protectedLayout }>
+                <Route path="dashboard" element={protectedLayout}>
                     <Route
                         path="home"
-                        element={ role === "PASSENGER" ? <PassengerHomePage /> : <DriverHomePage /> }
+                        element={role === "PASSENGER" ? <PassengerHomePage/> : <DriverHomePage/>}
                     />
-                    <Route path="profile" element={<ProfilePage />} />
-                    <Route path="update-password" element={<UpdatePasswordPage />} />
+                    <Route path="profile" element={<ProfilePage/>}/>
+                    <Route path="update-password" element={<UpdatePasswordPage/>}/>
                     <Route
                         path="manage-vehicle"
-                        element={ role === "DRIVER" ? <ManageVehiclePage /> : <RootRedirect /> }
+                        element={role === "DRIVER" ? <ManageVehiclePage/> : <RootRedirect/>}
                     />
                     <Route
                         path="current-rides"
-                        element={ role === "PASSENGER" ? <CurrentRidesPage /> : <RootRedirect /> }
+                        element={role === "PASSENGER" ? <CurrentRidesPage/> : <RootRedirect/>}
                     />
                 </Route>
-                <Route path="/*" element={ <RootRedirect /> }/>
+                <Route path="/*" element={<RootRedirect/>}/>
             </Routes>
-         </BrowserRouter>
+        </BrowserRouter>
     );
 };

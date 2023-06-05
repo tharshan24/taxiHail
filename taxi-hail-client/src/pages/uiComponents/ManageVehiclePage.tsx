@@ -51,7 +51,7 @@ const ManageVehiclePage: React.FC = () => {
     }, []);
 
     if (loading) {
-        return <Spin size="large" />;
+        return <Spin size="large"/>;
     }
 
     if (vehicleData !== null) {
@@ -60,7 +60,7 @@ const ManageVehiclePage: React.FC = () => {
         );
     } else {
         return (
-            <AddVehicleForm />
+            <AddVehicleForm/>
         );
     }
 

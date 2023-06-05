@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Form, Select, Button, Spin, message } from 'antd';
+import React, {useState, useEffect} from 'react';
+import {Form, Select, Button, Spin, message} from 'antd';
 import axios from 'axios';
 import {Navigate, useNavigate} from "react-router-dom";
 
-const { Option } = Select;
+const {Option} = Select;
 
 let pickupLocations = [
     {
@@ -42,7 +42,7 @@ const PassengerHomePage: React.FC = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
 
-    useEffect( () => {
+    useEffect(() => {
         checkRide();
     })
 
@@ -79,7 +79,7 @@ const PassengerHomePage: React.FC = () => {
     const fetchVehicleTypes = async () => {
         try {
             console.log(sessionStorage.getItem("role"))
-            if(sessionStorage.getItem("role") !== "PASSENGER") {
+            if (sessionStorage.getItem("role") !== "PASSENGER") {
                 navigate("/");
             }
             const token = sessionStorage.getItem('accessToken');
@@ -127,7 +127,8 @@ const PassengerHomePage: React.FC = () => {
     return (
         <div className="request-ride-container">
             <Form form={form} onFinish={handleRequestRide}>
-                <Form.Item label="Vehicle Type" name="vehicleType" rules={[{ required: true, message: 'Please select a vehicle type' }]}>
+                <Form.Item label="Vehicle Type" name="vehicleType"
+                           rules={[{required: true, message: 'Please select a vehicle type'}]}>
                     <Select placeholder="Select vehicle type">
                         {vehicleTypes.map((vehicleType: any) => (
                             <Option key={vehicleType.vehicleTypeId} value={vehicleType.vehicleTypeId}>
@@ -136,8 +137,9 @@ const PassengerHomePage: React.FC = () => {
                         ))}
                     </Select>
                 </Form.Item>
-                <Form.Item label="Pickup Location" name="pickupLocation" rules={[{ required: true, message: 'Please select a pickup location' }]}>
-                    <Select placeholder="Select pickup location" >
+                <Form.Item label="Pickup Location" name="pickupLocation"
+                           rules={[{required: true, message: 'Please select a pickup location'}]}>
+                    <Select placeholder="Select pickup location">
                         {pickupLocations.map((pickupLocation: any) => (
                             <Option value={`${pickupLocation.latitude},${pickupLocation.longitude}`}>
                                 {`${pickupLocation.latitude},${pickupLocation.longitude}`}
@@ -145,8 +147,9 @@ const PassengerHomePage: React.FC = () => {
                         ))}
                     </Select>
                 </Form.Item>
-                <Form.Item label="Destination Location" name="destinationLocation" rules={[{ required: true, message: 'Please select a destination location' }]}>
-                    <Select placeholder="Select destination location" >
+                <Form.Item label="Destination Location" name="destinationLocation"
+                           rules={[{required: true, message: 'Please select a destination location'}]}>
+                    <Select placeholder="Select destination location">
                         {destinationLocations.map((destinationLocation: any) => (
                             <Option value={`${destinationLocation.latitude},${destinationLocation.longitude}`}>
                                 {`${destinationLocation.latitude},${destinationLocation.longitude}`}
@@ -157,7 +160,7 @@ const PassengerHomePage: React.FC = () => {
                 <Form.Item>
                     {reqLoading ? (
                         <div className="spin-container">
-                            <Spin />
+                            <Spin/>
                             <Button onClick={handleCancelRequest}>Cancel</Button>
                         </div>
                     ) : (

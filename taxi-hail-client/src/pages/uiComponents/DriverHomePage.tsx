@@ -23,7 +23,7 @@ const DriverHomePage: React.FC = () => {
         4: 'Completed',
     };
 
-    const fetchRiderequests = async () => {
+    const fetchRideRequests = async () => {
         // setLoading(true);
         try {
             const token = sessionStorage.getItem("accessToken");
@@ -53,8 +53,8 @@ const DriverHomePage: React.FC = () => {
     };
 
     useEffect(() => {
-        fetchRiderequests();
-        const interval = setInterval(fetchRiderequests, 5000); // Fetch current rides every 5 seconds
+        fetchRideRequests();
+        const interval = setInterval(fetchRideRequests, 5000); // Fetch current rides every 5 seconds
         return () => clearInterval(interval);
     }, []);
 

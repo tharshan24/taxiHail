@@ -14,6 +14,8 @@ import Middle from "./Middle"
 import RootRedirect from "./RootRedirect";
 import LazyLogin from "./LazyLogin";
 import ManageVehiclePage from "../../pages/uiComponents/ManageVehiclePage";
+import CurrentRides from "../../pages/uiComponents/CurrentRidesPage";
+import CurrentRidesPage from "../../pages/uiComponents/CurrentRidesPage";
 
 export const AppRouter: React.FC = () => {
 
@@ -56,7 +58,7 @@ export const AppRouter: React.FC = () => {
                     />
                     <Route
                         path="current-rides"
-                        element={ role === "PASSENGER" ? <ManageVehiclePage /> : <RootRedirect /> }
+                        element={ role === "PASSENGER" ? <CurrentRidesPage /> : <RootRedirect /> }
                     />
                 </Route>
                 <Route path="/*" element={ <RootRedirect /> }/>

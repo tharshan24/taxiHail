@@ -68,5 +68,3 @@ driver_dashboard:
                     return_success_message_accepted
                     change_session_storage_inRide_as_1
                     refresh
-
-

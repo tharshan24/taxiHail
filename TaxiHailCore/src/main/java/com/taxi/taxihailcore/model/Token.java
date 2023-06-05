@@ -37,4 +37,5 @@ public class Token {
     @ManyToOne(optional = false)
     @JoinColumn(name = "auth_user", nullable = false)
     public User authUser;
+
 }

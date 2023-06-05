@@ -1,10 +1,10 @@
 package com.taxi.taxihailcore.service;
 
 import com.taxi.taxihailcore.model.User;
-import com.taxi.taxihailcore.repository.UserRepository;
-import com.taxi.taxihailcore.repository.VehicleTypeRepository;
 import com.taxi.taxihailcore.model.Vehicle;
+import com.taxi.taxihailcore.repository.UserRepository;
 import com.taxi.taxihailcore.repository.VehicleRepository;
+import com.taxi.taxihailcore.repository.VehicleTypeRepository;
 import com.taxi.taxihailcore.response.CommonResponse;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ public class VehicleService {
     private final VehicleTypeRepository vehicleTypeRepository;
     private final UserRepository userRepository;
 
-    public VehicleService(VehicleRepository vehicleRepository, VehicleTypeRepository vehicleTypeRepository, UserRepository userRepository){
+    public VehicleService(VehicleRepository vehicleRepository, VehicleTypeRepository vehicleTypeRepository, UserRepository userRepository) {
         this.vehicleRepository = vehicleRepository;
         this.vehicleTypeRepository = vehicleTypeRepository;
         this.userRepository = userRepository;
@@ -28,7 +28,7 @@ public class VehicleService {
     }
 
     public CommonResponse addVehicle(Vehicle request, User driver) {
-        try{
+        try {
             var vehicle = Vehicle.builder()
                     .vehicleNo(request.getVehicleNo())
                     .vehicleType(request.getVehicleType())
@@ -52,7 +52,7 @@ public class VehicleService {
     }
 
     public CommonResponse updateVehicle(Vehicle request, UUID vehicleId) {
-        try{
+        try {
 
             vehicleRepository.findByVehicleIdAndStatus(vehicleId, 1).ifPresent(vehicle -> {
                 vehicle.setVehicleType(request.getVehicleType());

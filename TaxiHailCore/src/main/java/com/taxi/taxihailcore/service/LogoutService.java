@@ -1,7 +1,7 @@
 package com.taxi.taxihailcore.service;
 
-import com.taxi.taxihailcore.response.AuthenticationResponse;
 import com.taxi.taxihailcore.repository.TokenRepository;
+import com.taxi.taxihailcore.response.AuthenticationResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class LogoutService implements LogoutServiceInterface {
     ) {
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
-        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return AuthenticationResponse.builder()
                     .accessToken(null)
                     .refreshToken(null)

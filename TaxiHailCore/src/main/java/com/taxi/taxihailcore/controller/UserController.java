@@ -1,11 +1,11 @@
 package com.taxi.taxihailcore.controller;
 
-import com.taxi.taxihailcore.response.AuthenticationResponse;
 import com.taxi.taxihailcore.dto.PasswordResetDTO;
 import com.taxi.taxihailcore.dto.UserDTO;
 import com.taxi.taxihailcore.exceptions.UserRegistrationException;
 import com.taxi.taxihailcore.model.User;
 import com.taxi.taxihailcore.repository.UserRepository;
+import com.taxi.taxihailcore.response.AuthenticationResponse;
 import com.taxi.taxihailcore.service.LogoutService;
 import com.taxi.taxihailcore.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +27,7 @@ public class UserController {
     private final LogoutService logoutService;
     private final UserRepository userRepository;
 
-    public UserController(UserService userService, LogoutService logoutService, UserRepository userRepository){
+    public UserController(UserService userService, LogoutService logoutService, UserRepository userRepository) {
         this.userService = userService;
         this.logoutService = logoutService;
         this.userRepository = userRepository;
@@ -69,8 +69,7 @@ public class UserController {
             if (userRepository.existsByMobile(request.getMobile()) && !request.getMobile().equals(user1.getMobile())) {
                 throw new UserRegistrationException("Mobile already exists");
             }
-        }
-        else {
+        } else {
             throw new UserRegistrationException("User not found");
         }
         return ResponseEntity.ok(userService.updateUser(request, userId));
@@ -81,7 +80,7 @@ public class UserController {
             @RequestBody @NotNull PasswordResetDTO request,
             HttpServletRequest httpServletRequest) {
 
-        if(!request.getNewPassword().equals(request.getNewPasswordConfirm())) {
+        if (!request.getNewPassword().equals(request.getNewPasswordConfirm())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password doesn't match");
         }
         UUID userId = UUID.fromString((String) httpServletRequest.getAttribute("userId"));

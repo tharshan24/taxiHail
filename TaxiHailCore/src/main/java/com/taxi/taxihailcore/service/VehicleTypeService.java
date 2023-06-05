@@ -14,7 +14,7 @@ import java.util.List;
 public class VehicleTypeService {
     private final VehicleTypeRepository vehicleTypeRepository;
 
-    public VehicleTypeService(VehicleTypeRepository vehicleTypeRepository){
+    public VehicleTypeService(VehicleTypeRepository vehicleTypeRepository) {
         this.vehicleTypeRepository = vehicleTypeRepository;
     }
 

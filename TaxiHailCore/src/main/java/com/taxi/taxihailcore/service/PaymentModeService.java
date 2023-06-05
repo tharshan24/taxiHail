@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 public class PaymentModeService {
     private final PaymentModeRepository paymentModeRepository;
 
-    public PaymentModeService(PaymentModeRepository paymentModeRepository){
+    public PaymentModeService(PaymentModeRepository paymentModeRepository) {
         this.paymentModeRepository = paymentModeRepository;
     }
 }

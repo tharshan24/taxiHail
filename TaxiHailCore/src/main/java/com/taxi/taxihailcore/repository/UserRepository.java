@@ -18,9 +18,11 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     void softDelete(@Param("userId") UUID userId);
 
     Optional<User> findByUserName(String username);
+
     Optional<User> findByUserNameAndStatus(String username, int status);
 
     Optional<User> findByUserId(UUID userId);
+
     Optional<User> findByUserIdAndStatus(UUID userId, int status);
 
     boolean existsByUserName(String username);

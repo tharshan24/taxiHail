@@ -13,14 +13,17 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RideDTO {
+public class RideViewDTO {
     private UUID rideId;
-    private UUID passengerId;
+    private String passenger;
     private BigDecimal pickupLocationLatitude;
     private BigDecimal pickupLocationLongitude;
     private BigDecimal destinationLocationLatitude;
     private BigDecimal destinationLocationLongitude;
-    private UUID driverId;
+    private String driver;
+    private String vehicleType;
+    private String vehicleNo;
+    private BigDecimal amount;
     private int status;
     private Timestamp createdAt;
     private Timestamp updatedAt;

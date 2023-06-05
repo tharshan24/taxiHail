@@ -10,7 +10,7 @@ public class PaymentModeController {
 
     private final PaymentModeService paymentModeService;
 
-    public PaymentModeController(PaymentModeService paymentModeService){
+    public PaymentModeController(PaymentModeService paymentModeService) {
         this.paymentModeService = paymentModeService;
     }
 }

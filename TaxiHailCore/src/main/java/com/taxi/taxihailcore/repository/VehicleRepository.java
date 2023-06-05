@@ -17,7 +17,7 @@ public interface VehicleRepository extends JpaRepository<Vehicle, UUID> {
     @Query("UPDATE Vehicle v SET v.status = 0 WHERE v.vehicleId = :vehicleId")
     void softDelete(@Param("vehicleId") UUID vehicleId);
 
-    Optional<Vehicle> findByDriverAndStatus( User driver, int status);
+    Optional<Vehicle> findByDriverAndStatus(User driver, int status);
 
     Optional<Vehicle> findByVehicleIdAndStatus(UUID vehicleId, int status);
 

@@ -23,7 +23,7 @@ public class Auth {
     private final LogoutService logoutService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register (@RequestBody RegisterRequestDTO request) {
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequestDTO request) {
         // Check if the username or email already exists in the database
         if (userRepository.existsByUserName(request.getUsername())) {
             throw new UserRegistrationException("Username already exists");
@@ -37,7 +37,7 @@ public class Auth {
             throw new UserRegistrationException("Mobile already exists");
         }
 
-        if(!request.getPassword().equals(request.getPasswordConfirm())) {
+        if (!request.getPassword().equals(request.getPasswordConfirm())) {
             return ResponseEntity.ok(
                     AuthenticationResponse.builder()
                             .status(0)
@@ -49,7 +49,7 @@ public class Auth {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate (
+    public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody RegisterRequestDTO request
     ) {
         return ResponseEntity.ok(authenticationService.authenticate(request));
@@ -67,8 +67,7 @@ public class Auth {
     public ResponseEntity<AuthenticationResponse> logout(
             HttpServletRequest request,
             HttpServletResponse response,
-            Authentication authentication)
-    {
+            Authentication authentication) {
         return ResponseEntity.ok(logoutService.logout(request, response, authentication));
     }
 

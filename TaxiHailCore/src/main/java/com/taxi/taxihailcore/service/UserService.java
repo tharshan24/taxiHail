@@ -17,7 +17,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder){
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -25,7 +25,7 @@ public class UserService {
     public ResponseEntity<UserDTO> viewUser(UUID userId) {
         Optional<User> optionalUser = userRepository.findByUserIdAndStatus(userId, 1);
 
-        if(optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             user.setPassword(null);
             UserDTO userDTO = new UserDTO();
@@ -43,14 +43,13 @@ public class UserService {
             userDTO.setUpdatedAt(user.getUpdatedAt());
 
             return ResponseEntity.ok(userDTO);
-        }
-        else {
+        } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 
     public ResponseEntity updateUser(UserDTO request, UUID userId) {
-        try{
+        try {
 
             userRepository.findByUserIdAndStatus(userId, 1).ifPresent(user -> {
                 user.setFirstName(request.getFirstName());
@@ -70,10 +69,10 @@ public class UserService {
     public ResponseEntity<String> resetPassword(PasswordResetDTO request, UUID userId) {
         Optional<User> optionalUser = userRepository.findByUserIdAndStatus(userId, 1);
 
-        if(optionalUser.isPresent()) {
+        if (optionalUser.isPresent()) {
             User user = optionalUser.get();
 
-            if(!passwordEncoder.matches(request.getOldPassword(), user.getPassword())){
+            if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password Error");
             }
 

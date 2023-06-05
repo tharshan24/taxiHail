@@ -3,11 +3,11 @@ package com.taxi.taxihailcore.controller;
 import com.taxi.taxihailcore.dto.UserDTO;
 import com.taxi.taxihailcore.dto.VehicleDTO;
 import com.taxi.taxihailcore.dto.VehicleTypeDTO;
+import com.taxi.taxihailcore.exceptions.UserRegistrationException;
 import com.taxi.taxihailcore.model.User;
+import com.taxi.taxihailcore.model.Vehicle;
 import com.taxi.taxihailcore.model.VehicleType;
 import com.taxi.taxihailcore.repository.UserRepository;
-import com.taxi.taxihailcore.exceptions.UserRegistrationException;
-import com.taxi.taxihailcore.model.Vehicle;
 import com.taxi.taxihailcore.repository.VehicleRepository;
 import com.taxi.taxihailcore.response.CommonResponse;
 import com.taxi.taxihailcore.service.VehicleService;
@@ -29,7 +29,7 @@ public class VehicleController {
     private final UserRepository userRepository;
     private final VehicleRepository vehicleRepository;
 
-    public VehicleController(VehicleService vehicleService, UserRepository userRepository, VehicleRepository vehicleRepository){
+    public VehicleController(VehicleService vehicleService, UserRepository userRepository, VehicleRepository vehicleRepository) {
         this.vehicleService = vehicleService;
         this.userRepository = userRepository;
         this.vehicleRepository = vehicleRepository;
@@ -41,7 +41,7 @@ public class VehicleController {
     ) {
         UUID userId = UUID.fromString((String) request.getAttribute("userId"));
         Optional<User> optionalUser = userRepository.findByUserId(userId);
-        if(optionalUser.isPresent()) {
+        if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             Optional<Vehicle> optionalVehicle = vehicleService.viewVehicleByDriver(user);
             if (optionalVehicle.isPresent()) {
@@ -67,7 +67,7 @@ public class VehicleController {
     }
 
     @PostMapping("/add_vehicle")
-    public ResponseEntity<CommonResponse> addVehicle (
+    public ResponseEntity<CommonResponse> addVehicle(
             @RequestBody @NotNull Vehicle request,
             @NotNull HttpServletRequest httpServletRequest
     ) {
@@ -82,7 +82,7 @@ public class VehicleController {
     }
 
     @PostMapping("/update_vehicle")
-    public ResponseEntity<CommonResponse> updateVehicle (
+    public ResponseEntity<CommonResponse> updateVehicle(
             @RequestBody @NotNull Vehicle request,
             @NotNull HttpServletRequest httpServletRequest
     ) {
@@ -103,8 +103,7 @@ public class VehicleController {
             } else {
                 throw new UserRegistrationException("Vehicle not found");
             }
-        }
-        else {
+        } else {
             throw new UserRegistrationException("User not found");
         }
         return ResponseEntity.ok(vehicleService.updateVehicle(request, vehicleId));

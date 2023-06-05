@@ -12,12 +12,12 @@ public class VehicleTypeController {
 
     private final VehicleTypeService vehicleTypeService;
 
-    public VehicleTypeController(VehicleTypeService vehicleTypeService){
+    public VehicleTypeController(VehicleTypeService vehicleTypeService) {
         this.vehicleTypeService = vehicleTypeService;
     }
 
     @GetMapping("/get_vehicle_types")
-    public ResponseEntity getVehicleTypes () {
+    public ResponseEntity getVehicleTypes() {
         return ResponseEntity.ok(vehicleTypeService.getVehicleTypes());
     }
 }

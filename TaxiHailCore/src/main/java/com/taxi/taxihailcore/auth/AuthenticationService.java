@@ -39,17 +39,17 @@ public class AuthenticationService {
     public AuthenticationResponse register(RegisterRequestDTO request) {
 
 
-        try{
+        try {
             var user = User.builder()
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .email(request.getEmail())
-                .userName(request.getUsername())
-                .mobile(request.getMobile())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.valueOf(request.getRole()))
-                .status(1)
-                .build();
+                    .firstName(request.getFirstName())
+                    .lastName(request.getLastName())
+                    .email(request.getEmail())
+                    .userName(request.getUsername())
+                    .mobile(request.getMobile())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .role(Role.valueOf(request.getRole()))
+                    .status(1)
+                    .build();
 
             var savedUser = userRepository.save(user);
             var jwtToken = jwtService.generateToken(user);
@@ -140,7 +140,7 @@ public class AuthenticationService {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String refreshToken;
         final String userName;
-        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return;
         }
         refreshToken = authHeader.substring(7);

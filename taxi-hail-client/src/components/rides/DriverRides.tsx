@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {message, Table} from 'antd';
+import {Button, message, Modal, Table} from 'antd';
 import axios from 'axios';
 import {useNavigate} from "react-router-dom";
 
@@ -8,7 +8,7 @@ const DriverRides = () => {
     const navigate = useNavigate();
 
     console.log(sessionStorage.getItem("role"))
-    if (sessionStorage.getItem("role") !== "PASSENGER") {
+    if (sessionStorage.getItem("role") !== "DRIVER") {
         navigate("/")
     }
 
@@ -58,6 +58,34 @@ const DriverRides = () => {
         return () => clearInterval(interval);
     }, []);
 
+    const handleStartRide = (record: any) => {
+        Modal.confirm({
+            title: 'Start Ride',
+            content: 'Are you sure you want to start this ride?',
+            onOk: () => {
+                // Call a function with the row key
+                console.log('Starting ride:', record.key);
+            },
+            onCancel: () => {
+                console.log('Start ride canceled');
+            },
+        });
+    };
+
+    const handleCompleteRide = (record: any) => {
+        Modal.confirm({
+            title: 'Complete Ride',
+            content: 'Are you sure you want to complete this ride?',
+            onOk: () => {
+                // Call a function with the row key
+                console.log('Completing ride:', record.key);
+            },
+            onCancel: () => {
+                console.log('Complete ride canceled');
+            },
+        });
+    };
+
     const columns = [
         {
             title: 'Ride ID',
@@ -103,6 +131,22 @@ const DriverRides = () => {
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
+            render: (_: any, record: any) => {
+                if (record.status === 'Driver Connected') {
+                    return (
+                        <Button type="primary" onClick={() => handleStartRide(record)}>
+                            Start Ride
+                        </Button>
+                    );
+                } else if (record.status === 'In Ride') {
+                    return (
+                        <Button type="primary" onClick={() => handleCompleteRide(record)}>
+                            Complete Ride
+                        </Button>
+                    );
+                }
+                return null;
+            },
         },
     ];
 

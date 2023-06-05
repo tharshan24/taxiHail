@@ -42,6 +42,11 @@ const PassengerHomePage: React.FC = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
 
+    console.log(sessionStorage.getItem("role"))
+    if (sessionStorage.getItem("role") !== "PASSENGER") {
+        navigate("/")
+    }
+
     useEffect(() => {
         checkRide();
     })

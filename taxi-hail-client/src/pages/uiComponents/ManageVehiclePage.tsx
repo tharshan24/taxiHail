@@ -11,6 +11,13 @@ const ManageVehiclePage: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [vehicleData, setVehicleData] = useState<any>(null);
 
+    useEffect(()=>{
+        if (sessionStorage.getItem("role") !== "DRIVER") {
+            // navigate("/");
+            window.location.href = window.location.origin + "/dashboard/manage-vehicle";
+        }
+    })
+
     useEffect(() => {
 
         const checkVehicle = async () => {

@@ -1,7 +1,7 @@
 import {
     Button, Col,
     Form, FormInstance,
-    Input, Row,
+    Input, message, Row,
     Select, Spin,
 } from 'antd';
 import {useNavigate} from "react-router-dom";
@@ -100,7 +100,7 @@ const ProfileForm: React.FC = () => {
             .then(response => {
                 // Handle the response from the server
                 if (response.data.statusCodeValue === 200) {
-                    alert(response.data.body);
+                    message.success(response.data.body);
                     setUserData({...userData, ...values})
                     // navigate('/dashboard/profile');
                 } else {
@@ -111,7 +111,7 @@ const ProfileForm: React.FC = () => {
                 }
             })
             .catch(error => {
-                alert(error.response.data);
+                message.error(error.response.data.body.message);
                 console.log(error.response)
                 if (error.response.status !== 400) {
                     sessionStorage.clear();

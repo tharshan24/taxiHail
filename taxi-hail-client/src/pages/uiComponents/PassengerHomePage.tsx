@@ -44,7 +44,8 @@ const PassengerHomePage: React.FC = () => {
 
     console.log(sessionStorage.getItem("role"))
     if (sessionStorage.getItem("role") !== "PASSENGER") {
-        navigate("/")
+        // navigate("/");
+        window.location.href = window.location.origin + "/";
     }
 
     useEffect(() => {
@@ -138,12 +139,12 @@ const PassengerHomePage: React.FC = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            if (response.data.status == 200) {
+            if (response.data.status === 200) {
                 message.success('Ride requested successfully!');
                 navigate("/dashboard/current-rides");
             } else {
                 console.log(response.data)
-                message.error('Failed to request ride. Please try again.');
+                message.error(response.data.message);
                 setReqLoading(false);
             }
             form.resetFields();

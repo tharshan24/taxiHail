@@ -45,7 +45,7 @@ const DriverRides = () => {
             });
 
             setCurrentRides((prevRides: any) => ridesData);
-            if(currentRides.length === 0) {
+            if(ridesData.length === 0) {
                 sessionStorage.setItem("inRide", "0");
                 sessionStorage.setItem("ride", "");
             }

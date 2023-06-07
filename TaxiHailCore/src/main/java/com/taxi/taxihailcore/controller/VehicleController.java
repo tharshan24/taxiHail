@@ -73,7 +73,10 @@ public class VehicleController {
     ) {
         // Check if the vehicle already exists in the database
         if (vehicleRepository.existsByVehicleNo(request.getVehicleNo())) {
-            throw new UserRegistrationException("Vehicle number already exists");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(CommonResponse.builder()
+                    .status(0)
+                    .message("Vehicle Number Already Exists")
+                    .build());
         }
 
         UUID userId = UUID.fromString((String) httpServletRequest.getAttribute("userId"));
@@ -98,13 +101,22 @@ public class VehicleController {
                 Vehicle vehicle = optionalVehicle.get();
                 vehicleId = vehicle.getVehicleId();
                 if (vehicleRepository.existsByVehicleNo(request.getVehicleNo()) && !request.getVehicleNo().equals(vehicle.getVehicleNo())) {
-                    throw new UserRegistrationException("Vehicle No already exists");
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(CommonResponse.builder()
+                            .status(0)
+                            .message("Vehicle Number Already Exists")
+                            .build());
                 }
             } else {
-                throw new UserRegistrationException("Vehicle not found");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(CommonResponse.builder()
+                        .status(0)
+                        .message("Vehicle not found")
+                        .build());
             }
         } else {
-            throw new UserRegistrationException("User not found");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(CommonResponse.builder()
+                    .status(0)
+                    .message("User not found")
+                    .build());
         }
         return ResponseEntity.ok(vehicleService.updateVehicle(request, vehicleId));
     }

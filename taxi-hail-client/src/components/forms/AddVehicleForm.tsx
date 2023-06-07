@@ -1,6 +1,6 @@
 // noinspection DuplicatedCode
 
-import {Button, Form, FormInstance, Input, Select, Spin} from 'antd';
+import {Button, Form, FormInstance, Input, message, Select, Spin} from 'antd';
 import {CarOutlined} from '@ant-design/icons';
 import {useNavigate} from 'react-router-dom';
 import axios from "axios";
@@ -51,15 +51,15 @@ export const AddVehicleForm: React.FC = () => {
             })
             .then(response => {
                 if (response.data.status === 200) {
-                    alert(response.data.message)
+                    message.success(response.data.message)
                     navigate("/dashboard/home")
                 } else {
-                    throw new Error(response.data.message);
+                    message.error(response.data.message);
                 }
             })
             .catch(error => {
-                sessionStorage.clear();
-                alert(error);
+                // sessionStorage.clear();
+                message.error(error.response.data.message);
             });
     };
 

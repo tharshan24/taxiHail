@@ -3,14 +3,16 @@ const updateLocation = (driver, vehicle, vehicleType, locationLatitude, location
 
     return new Promise((resolve, reject) => {
 
+        const defaultUUID = "00000000-0000-0000-0000-000000000000";
+
         const message = {
             driver,
-            vehicle,
-            vehicleType,
+            vehicle: vehicle || defaultUUID,
+            vehicleType: vehicleType || defaultUUID,
             locationLatitude,
             locationLongitude,
             inRide,
-            ride,
+            ride: ride || defaultUUID,
             status,
             createdAt
         };

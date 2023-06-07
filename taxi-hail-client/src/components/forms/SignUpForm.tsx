@@ -1,7 +1,7 @@
 import {
     Button,
     Form, FormInstance,
-    Input,
+    Input, message,
     Select,
 } from 'antd';
 import {useNavigate} from "react-router-dom";
@@ -47,11 +47,11 @@ const SignUpForm: React.FC = () => {
         axios.post('http://localhost:8080/auth/register', values)
             .then(response => {
                 if (response.data.status === 200) {
-                    alert(response.data.message);
+                    message.success(response.data.message);
                     return SessionManager(response.data); // Return the promise from SessionManager
                 } else {
                     sessionStorage.clear();
-                    throw new Error(response.data.message);
+                    message.error(response.data.message);
                 }
             })
             .then(() => {
@@ -61,7 +61,7 @@ const SignUpForm: React.FC = () => {
             .catch(error => {
                 sessionStorage.clear();
                 console.log(error)
-                alert(error.data.message);
+                message.error(error.response.data.message);
             });
     };
 
@@ -105,7 +105,7 @@ const SignUpForm: React.FC = () => {
                 label="Role"
                 rules={[{required: true, message: 'Please select a role!'}]}
             >
-                <Select placeholder="select your gender">
+                <Select placeholder="select your role">
                     <Option value="PASSENGER">Passenger</Option>
                     <Option value="DRIVER">Driver</Option>
                 </Select>

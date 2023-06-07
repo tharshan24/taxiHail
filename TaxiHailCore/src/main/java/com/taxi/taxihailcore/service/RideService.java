@@ -3,10 +3,7 @@ package com.taxi.taxihailcore.service;
 import com.taxi.taxihailcore.dto.RideRequestDTo;
 import com.taxi.taxihailcore.dto.RideViewDTO;
 import com.taxi.taxihailcore.model.*;
-import com.taxi.taxihailcore.repository.PaymentRepository;
-import com.taxi.taxihailcore.repository.RideDriverRepository;
-import com.taxi.taxihailcore.repository.RideRepository;
-import com.taxi.taxihailcore.repository.UserRepository;
+import com.taxi.taxihailcore.repository.*;
 import com.taxi.taxihailcore.response.CommonResponse;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.ParameterizedTypeReference;
@@ -23,15 +20,17 @@ public class RideService {
     private final RideRepository rideRepository;
     private final UserRepository userRepository;
     private final PaymentRepository paymentRepository;
+    private final PaymentModeRepository paymentModeRepository;
     private final RideDriverRepository rideDriverRepository;
 
     public RideService(
             RideRepository rideRepository, UserRepository userRepository,
-            PaymentRepository paymentRepository, RideDriverRepository rideDriverRepository
+            PaymentRepository paymentRepository, PaymentModeRepository paymentModeRepository, RideDriverRepository rideDriverRepository
     ) {
         this.rideRepository = rideRepository;
         this.userRepository = userRepository;
         this.paymentRepository = paymentRepository;
+        this.paymentModeRepository = paymentModeRepository;
         this.rideDriverRepository = rideDriverRepository;
     }
 
@@ -80,9 +79,12 @@ public class RideService {
 
                 Ride savedRide = rideRepository.save(ride);
 
+                Optional<PaymentMode> optionalPaymentMode = paymentModeRepository.findPaymentModeByPaymentModeId(UUID.fromString("996d5cc3-0105-476d-b1f3-540906fe19a0"));
+
                 var payment = Payment.builder()
                         .ride(savedRide)
                         .paymentAmount(BigDecimal.valueOf(Math.floor(Math.random() * (2000 - 200 + 1)) + 2000))
+                        .paymentMode(optionalPaymentMode.get())
                         .status(1)
                         .build();
 

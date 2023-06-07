@@ -37,9 +37,9 @@ const PassengerRides = () => {
 
             await ridesData.forEach((ride: any) => {
                 ride.status = rideStatusLabels[ride.status] || 'Unknown';
-                ride.picupLocation = ride.pickupLocationLatitude + " , " + ride.pickupLocationLongitude;
+                ride.pickupLocation = ride.pickupLocationLatitude + " , " + ride.pickupLocationLongitude;
                 ride.destinationLocation = ride.destinationLocationLatitude + " , " + ride.destinationLocationLongitude;
-                ride.amount = ride.amount === null ? "TBD" : ride.amount;
+                ride.amount = ride.amount === null ? "TBD" : "Rs. " + ride.amount;
                 ride.driver = ride.driver === null ? "Waiting for Driver" : ride.driver;
                 ride.vehicleType = ride.vehicleType === null ? "Waiting for Driver" : ride.vehicleType;
                 ride.vehicleNo = ride.vehicleNo === null ? "Waiting for Driver" : ride.vehicleNo;

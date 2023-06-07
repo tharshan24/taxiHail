@@ -10,7 +10,8 @@ const DriverHomePage: React.FC = () => {
 
     console.log(sessionStorage.getItem("role"))
     if (sessionStorage.getItem("role") !== "DRIVER") {
-        navigate("/")
+        // navigate("/");
+        window.location.href = window.location.origin + "/";
     }
 
     const [rideRequests, setRideRequests] = useState<any[]>([]);
@@ -102,8 +103,10 @@ const DriverHomePage: React.FC = () => {
             const data = response.data;
             if (data.status === 200) {
                 message.success('Ride Accepted');
-                sessionStorage.setItem("ride", rideId)
-                navigate("/dashboard/current-rides")
+                await sessionStorage.setItem("inRide", "1");
+                await sessionStorage.setItem("ride", rideId.toString());
+                console.log(sessionStorage.getItem("ride"))
+                navigate("/dashboard/current-rides");
             }
             else {
                 message.error(data.message);

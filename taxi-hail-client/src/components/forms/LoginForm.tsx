@@ -1,4 +1,4 @@
-import {Button, Form, FormInstance, Input} from 'antd';
+import {Button, Form, FormInstance, Input, message} from 'antd';
 import {LockOutlined, UserOutlined} from '@ant-design/icons';
 import {useNavigate} from 'react-router-dom';
 import axios from "axios";
@@ -19,11 +19,11 @@ export const LoginForm: React.FC = () => {
             .post('http://localhost:8080/auth/authenticate', values)
             .then(response => {
                 if (response.data.status === 200) {
-                    alert(response.data.message);
+                    message.success(response.data.message);
                     return SessionManager(response.data); // Return the promise from SessionManager
                 } else {
                     sessionStorage.clear();
-                    throw new Error(response.data.message);
+                    message.error(response.data.message);
                 }
             })
             .then(() => {

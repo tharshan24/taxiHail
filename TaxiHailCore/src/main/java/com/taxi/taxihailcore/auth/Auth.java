@@ -8,6 +8,7 @@ import com.taxi.taxihailcore.service.LogoutService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -26,19 +27,31 @@ public class Auth {
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequestDTO request) {
         // Check if the username or email already exists in the database
         if (userRepository.existsByUserName(request.getUsername())) {
-            throw new UserRegistrationException("Username already exists");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    AuthenticationResponse.builder()
+                        .status(0)
+                        .message("Username Already Exists")
+                        .build());
         }
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new UserRegistrationException("Email already exists");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    AuthenticationResponse.builder()
+                            .status(0)
+                            .message("Email Already Exists")
+                            .build());
         }
 
         if (userRepository.existsByMobile(request.getMobile())) {
-            throw new UserRegistrationException("Mobile already exists");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    AuthenticationResponse.builder()
+                            .status(0)
+                            .message("Mobile Already Exists")
+                            .build());
         }
 
         if (!request.getPassword().equals(request.getPasswordConfirm())) {
-            return ResponseEntity.ok(
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     AuthenticationResponse.builder()
                             .status(0)
                             .message("Password doesn't match")

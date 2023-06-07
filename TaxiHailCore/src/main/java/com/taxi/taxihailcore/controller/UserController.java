@@ -6,6 +6,7 @@ import com.taxi.taxihailcore.exceptions.UserRegistrationException;
 import com.taxi.taxihailcore.model.User;
 import com.taxi.taxihailcore.repository.UserRepository;
 import com.taxi.taxihailcore.response.AuthenticationResponse;
+import com.taxi.taxihailcore.response.CommonResponse;
 import com.taxi.taxihailcore.service.LogoutService;
 import com.taxi.taxihailcore.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -63,14 +64,23 @@ public class UserController {
         if (user.isPresent()) {
             User user1 = user.get();
             if (userRepository.existsByEmail(request.getEmail()) && !request.getEmail().equals(user1.getEmail())) {
-                throw new UserRegistrationException("Email already exists");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseEntity.status(HttpStatus.BAD_REQUEST).body(CommonResponse.builder()
+                        .status(0)
+                        .message("Email Already Exists")
+                        .build()));
             }
 
             if (userRepository.existsByMobile(request.getMobile()) && !request.getMobile().equals(user1.getMobile())) {
-                throw new UserRegistrationException("Mobile already exists");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseEntity.status(HttpStatus.BAD_REQUEST).body(CommonResponse.builder()
+                        .status(0)
+                        .message("Mobile Already Exists")
+                        .build()));
             }
         } else {
-            throw new UserRegistrationException("User not found");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseEntity.status(HttpStatus.BAD_REQUEST).body(CommonResponse.builder()
+                    .status(0)
+                    .message("User not found")
+                    .build()));
         }
         return ResponseEntity.ok(userService.updateUser(request, userId));
     }

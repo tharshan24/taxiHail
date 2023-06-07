@@ -1,7 +1,7 @@
 import {
     Button,
     Form, FormInstance,
-    Input,
+    Input, message,
     Select,
 } from 'antd';
 import {useNavigate} from "react-router-dom";
@@ -48,18 +48,18 @@ const UpdatePasswordForm: React.FC = () => {
         })
             .then(response => {
                 // Handle the response from the server
-                if (response.data.statusCode === 200) {
-                    alert(response.data.body);
+                if (response.status === 200) {
+                    message.success(response.data);
                     navigate('/dashboard/update-password');
                 } else {
                     // sessionStorage.clear();
-                    alert(response.data)
+                    message.error(response.data)
                     console.log(response)
                 }
             })
             .catch(error => {
                 // sessionStorage.clear();
-                alert(error.response);
+                message.error(error.response);
                 console.log(error.response)
             });
     };

@@ -45,7 +45,7 @@ public class RideController {
 
         final String authHeader = httpServletRequest.getHeader("Authorization");
 
-        if (!optionalRides.isEmpty()) {
+        if (optionalRides.isPresent() && !optionalRides.get().isEmpty()) {
             throw new RuntimeException("Already have an active ride !");
         }
 
@@ -58,8 +58,16 @@ public class RideController {
     ) {
         UUID userId = UUID.fromString((String) httpServletRequest.getAttribute("userId"));
         Role role = Role.valueOf((String) httpServletRequest.getAttribute("ROLE"));
-        List<RideViewDTO> optionalRides = rideService.getCurrentRides(userId, role);
-        if (!optionalRides.isEmpty()) {
+        Optional<List<Ride>> optionalRides;
+        if (role == Role.PASSENGER) {
+            optionalRides = rideRepository.findByPassengerAndStatus(userId);
+        } else if (role == Role.DRIVER) {
+            optionalRides = rideRepository.findByDriverAndStatus(userId);
+        } else {
+            throw new RuntimeException("User Role error !");
+        }
+
+        if (optionalRides.isPresent() && !optionalRides.get().isEmpty()) {
             return ResponseEntity.ok(CommonResponse.builder()
                             .message("Already have an active ride !")
                             .status(1)
@@ -80,18 +88,25 @@ public class RideController {
 
         UUID userId = UUID.fromString((String) httpServletRequest.getAttribute("userId"));
 
-        Optional<Ride> optionalRide = rideRepository.findById(rideId);
+        Optional<Ride> optionalRide = rideRepository.findRideByRideId(rideId);
 
-        if (optionalRide.isPresent()) {
-            if (optionalRide.get().getPassenger().getUserId() != userId || optionalRide.get().getDriver().getUserId() != userId) {
-                return ResponseEntity.ok(CommonResponse.builder()
-                        .message("User Error")
-                        .status(0)
-                        .build());
-            }
+        if (!optionalRide.isPresent() || optionalRide.isEmpty()) {
+            return ResponseEntity.ok(CommonResponse.builder()
+                    .message("Ride not found")
+                    .status(0)
+                    .build());
         }
 
-        return ResponseEntity.ok(rideService.cancelRide(optionalRide.get()));
+        Ride ride = optionalRide.get();
+
+        if (!ride.getPassenger().getUserId().equals(userId)) {
+            return ResponseEntity.ok(CommonResponse.builder()
+                    .message("User Error")
+                    .status(0)
+                    .build());
+        }
+
+        return ResponseEntity.ok(rideService.cancelRide(ride));
     }
 
     @GetMapping("change_ride/{rideId}/{status}")
@@ -101,10 +116,10 @@ public class RideController {
 
         UUID userId = UUID.fromString((String) httpServletRequest.getAttribute("userId"));
 
-        Optional<Ride> optionalRide = rideRepository.findById(rideId);
+        Optional<Ride> optionalRide = rideRepository.findRideByRideId(rideId);
 
         if (optionalRide.isPresent()) {
-            if (optionalRide.get().getPassenger().getUserId() != userId || optionalRide.get().getDriver().getUserId() != userId) {
+            if (optionalRide.get().getPassenger().getUserId().equals(userId) && optionalRide.get().getDriver().getUserId().equals(userId)) {
                 return ResponseEntity.ok(CommonResponse.builder()
                         .message("User Error")
                         .status(0)
@@ -122,21 +137,21 @@ public class RideController {
 
         UUID userId = UUID.fromString((String) httpServletRequest.getAttribute("userId"));
 
-        Optional<Ride> optionalRide = rideRepository.findById(rideId);
+        Optional<Ride> optionalRide = rideRepository.findRideByRideId(rideId);
 
         return ResponseEntity.ok(rideService.acceptRide(optionalRide.get(), userId));
     }
 
-    @GetMapping("accept_ride/{rideId}")
+    @GetMapping("reject_ride/{rideId}")
     public ResponseEntity<CommonResponse> rejectRide(
             @NotNull HttpServletRequest httpServletRequest,
             @PathVariable UUID rideId) {
 
         UUID userId = UUID.fromString((String) httpServletRequest.getAttribute("userId"));
 
-        Optional<Ride> optionalRide = rideRepository.findById(rideId);
+        Optional<Ride> optionalRide = rideRepository.findRideByRideId(rideId);
 
-        return ResponseEntity.ok(rideService.acceptRide(optionalRide.get(), userId));
+        return ResponseEntity.ok(rideService.rejectRide(optionalRide.get(), userId));
     }
 
     @GetMapping("current_rides")

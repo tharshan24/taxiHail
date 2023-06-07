@@ -33,7 +33,7 @@ public class Payment {
     private BigDecimal paymentAmount;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "payment_mode", columnDefinition = "UUID default 996d5cc3-0105-476d-b1f3-540906fe19a0")
+    @JoinColumn(name = "payment_mode", columnDefinition = "UUID default '996d5cc3-0105-476d-b1f3-540906fe19a0'")
     private PaymentMode paymentMode;
 
     @Column(name = "status", length = 1, nullable = false)

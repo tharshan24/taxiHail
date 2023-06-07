@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, message, Modal, Table} from 'antd';
+import {Button, message, Modal, Space, Table} from 'antd';
 import axios from 'axios';
 import {useNavigate} from "react-router-dom";
 import {UUID} from "crypto";
@@ -36,13 +36,16 @@ const PassengerRides = () => {
             const ridesData = response.data;
 
             await ridesData.forEach((ride: any) => {
-                ride.status = rideStatusLabels[ride.rideStatus] || 'Unknown';
+                ride.status = rideStatusLabels[ride.status] || 'Unknown';
                 ride.picupLocation = ride.pickupLocationLatitude + " , " + ride.pickupLocationLongitude;
                 ride.destinationLocation = ride.destinationLocationLatitude + " , " + ride.destinationLocationLongitude;
                 ride.amount = ride.amount === null ? "TBD" : ride.amount;
+                ride.driver = ride.driver === null ? "Waiting for Driver" : ride.driver;
+                ride.vehicleType = ride.vehicleType === null ? "Waiting for Driver" : ride.vehicleType;
+                ride.vehicleNo = ride.vehicleNo === null ? "Waiting for Driver" : ride.vehicleNo;
             });
 
-            setCurrentRides((prevRides: any) => [...prevRides, ...ridesData]);
+            setCurrentRides((prevRides: any) => ridesData);
             // alert(currentRides);
         } catch (error) {
             console.error('Error fetching current rides:', error);
@@ -119,14 +122,14 @@ const PassengerRides = () => {
             key: 'driver',
         },
         {
-            title: 'Vehicle',
-            dataIndex: 'vehicle',
-            key: 'vehicle',
+            title: 'Ride Type',
+            dataIndex: 'vehicleType',
+            key: 'vehicleType',
         },
         {
             title: 'Vehicle Number',
-            dataIndex: 'vehicleNumber',
-            key: 'vehicleNumber',
+            dataIndex: 'vehicleNo',
+            key: 'vehicleNo',
         },
         {
             title: 'Amount',
@@ -143,11 +146,20 @@ const PassengerRides = () => {
             dataIndex: 'action',
             key: 'action',
             render: (_: any, record: any) => {
-                return (
-                    <Button type="primary" onClick={() => handleCancelRequest(record)}>
-                        Cancel Ride
-                    </Button>
-                );
+                if(record.status === "Pending" || record.status === "Driver Connected") {
+                    return (
+                        <Button type="primary" onClick={() => handleCancelRequest(record)}>
+                            Cancel Ride
+                        </Button>
+                    );
+                }
+                else {
+                    return (
+                        <Space>
+                            No Action
+                        </Space>
+                    );
+                }
             },
         },
     ];

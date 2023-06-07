@@ -58,7 +58,7 @@ export const AppRouter: React.FC = () => {
                     />
                     <Route
                         path="current-rides"
-                        element={role === "PASSENGER" ? <CurrentRidesPage/> : <RootRedirect/>}
+                        element={<CurrentRidesPage/>}
                     />
                 </Route>
                 <Route path="/*" element={<RootRedirect/>}/>

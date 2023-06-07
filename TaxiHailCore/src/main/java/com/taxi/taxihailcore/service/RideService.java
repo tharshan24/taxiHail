@@ -8,6 +8,7 @@ import com.taxi.taxihailcore.repository.RideDriverRepository;
 import com.taxi.taxihailcore.repository.RideRepository;
 import com.taxi.taxihailcore.repository.UserRepository;
 import com.taxi.taxihailcore.response.CommonResponse;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -34,35 +35,17 @@ public class RideService {
         this.rideDriverRepository = rideDriverRepository;
     }
 
+    @Transactional
     public CommonResponse rideRequest(RideRequestDTo rideRequestDTo, User passenger, String authHeader) {
 
         String[] pickupParts = rideRequestDTo.getPickupLocation().split(",");
         String[] destinationParts = rideRequestDTo.getDestinationLocation().split(",");
 
         try {
-            var ride = Ride.builder()
-                    .pickupLocationLatitude(new BigDecimal(pickupParts[0]))
-                    .pickupLocationLongitude(new BigDecimal(pickupParts[1]))
-                    .destinationLocationLatitude(new BigDecimal(destinationParts[0]))
-                    .destinationLocationLongitude(new BigDecimal(destinationParts[1]))
-                    .passenger(passenger)
-                    .status(1)
-                    .build();
-
-            Ride savedRide = rideRepository.save(ride);
-
-            var payment = Payment.builder()
-                    .ride(savedRide)
-                    .paymentAmount(BigDecimal.valueOf(Math.floor(Math.random() * (2000 - 200 + 1)) + 2000))
-                    .status(1)
-                    .build();
-
-            Payment payment1 = paymentRepository.save(payment);
-
             //make REST request to location server
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.set("Authorization", authHeader);
+//            headers.set("Authorization", authHeader);
 
             HttpEntity<RideRequestDTo> requestEntity = new HttpEntity<>(rideRequestDTo, headers);
 
@@ -85,6 +68,25 @@ public class RideService {
                             .message("No drivers available !")
                             .build();
                 }
+
+                var ride = Ride.builder()
+                        .pickupLocationLatitude(new BigDecimal(pickupParts[0]))
+                        .pickupLocationLongitude(new BigDecimal(pickupParts[1]))
+                        .destinationLocationLatitude(new BigDecimal(destinationParts[0]))
+                        .destinationLocationLongitude(new BigDecimal(destinationParts[1]))
+                        .passenger(passenger)
+                        .status(1)
+                        .build();
+
+                Ride savedRide = rideRepository.save(ride);
+
+                var payment = Payment.builder()
+                        .ride(savedRide)
+                        .paymentAmount(BigDecimal.valueOf(Math.floor(Math.random() * (2000 - 200 + 1)) + 2000))
+                        .status(1)
+                        .build();
+
+                Payment payment1 = paymentRepository.save(payment);
 
                 List<RideDriver> rideDriverList = new ArrayList<>();
 
@@ -117,7 +119,7 @@ public class RideService {
         } catch (Exception e) {
             return CommonResponse.builder()
                     .status(0)
-                    .message("Ride request Failed: " + e.getMessage())
+                    .message("Ride request Failed: " + e)
                     .build();
         }
     }
@@ -149,9 +151,16 @@ public class RideService {
             rideViewDTO.setPickupLocationLongitude(ride.getPickupLocationLongitude());
             rideViewDTO.setDestinationLocationLatitude(ride.getDestinationLocationLatitude());
             rideViewDTO.setDestinationLocationLongitude(ride.getDestinationLocationLongitude());
-            rideViewDTO.setDriver(ride.getDriver().getFirstName());
-            rideViewDTO.setVehicleType(ride.getDriver().getVehicle().getVehicleType().getVehicleType());
-            rideViewDTO.setVehicleNo(ride.getDriver().getVehicle().getVehicleNo());
+            // Check if the driver is not null before accessing its properties
+            if (ride.getDriver() != null) {
+                rideViewDTO.setDriver(ride.getDriver().getFirstName());
+
+                // Check if the vehicle is not null before accessing its properties
+                if (ride.getDriver().getVehicle() != null) {
+                    rideViewDTO.setVehicleType(ride.getDriver().getVehicle().getVehicleType().getVehicleType());
+                    rideViewDTO.setVehicleNo(ride.getDriver().getVehicle().getVehicleNo());
+                }
+            }
             rideViewDTO.setAmount(ride.getPayment().getPaymentAmount());
             rideViewDTO.setStatus(ride.getStatus());
             rideViewDTO.setCreatedAt(ride.getCreatedAt());
@@ -180,9 +189,6 @@ public class RideService {
             rideViewDTO.setPickupLocationLongitude(ride.getPickupLocationLongitude());
             rideViewDTO.setDestinationLocationLatitude(ride.getDestinationLocationLatitude());
             rideViewDTO.setDestinationLocationLongitude(ride.getDestinationLocationLongitude());
-            rideViewDTO.setDriver(ride.getDriver().getFirstName());
-            rideViewDTO.setVehicleType(ride.getDriver().getVehicle().getVehicleType().getVehicleType());
-            rideViewDTO.setVehicleNo(ride.getDriver().getVehicle().getVehicleNo());
             rideViewDTO.setAmount(ride.getPayment().getPaymentAmount());
             rideViewDTO.setStatus(ride.getStatus());
             rideViewDTO.setCreatedAt(ride.getCreatedAt());
@@ -194,7 +200,7 @@ public class RideService {
     }
 
     @Transactional
-    public CommonResponse cancelRide(Ride ride) {
+    public CommonResponse cancelRide(@NotNull Ride ride) {
         ride.setStatus(0); // Update the ride status to 0
         rideRepository.save(ride);
 
@@ -229,7 +235,10 @@ public class RideService {
 
     @Transactional
     public CommonResponse acceptRide(Ride ride, UUID userId) {
+
+        Optional<User> driver = userRepository.findByUserId(userId);
         ride.setStatus(2);
+        ride.setDriver(driver.get());
         rideRepository.save(ride);
 
         List<RideDriver> rideDrivers = rideDriverRepository.findRideDriverByRide(ride);

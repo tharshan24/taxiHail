@@ -27,22 +27,24 @@ const DriverRides = () => {
     const fetchCurrentRides = async () => {
         // setLoading(true);
         try {
+
             const token = sessionStorage.getItem("accessToken");
             const response = await axios.get('http://localhost:8080/ride/current_rides', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
+
             const ridesData = response.data;
 
             await ridesData.forEach((ride: any) => {
-                ride.status = rideStatusLabels[ride.rideStatus] || 'Unknown';
-                ride.picupLocation = ride.pickupLocationLatitude + " , " + ride.pickupLocationLongitude;
+                ride.status = rideStatusLabels[ride.status] || 'Unknown';
+                ride.pickupLocation = ride.pickupLocationLatitude + " , " + ride.pickupLocationLongitude;
                 ride.destinationLocation = ride.destinationLocationLatitude + " , " + ride.destinationLocationLongitude;
-                ride.amount = ride.amount === null ? "TBD" : ride.amount;
+                ride.amount = ride.amount === null ? "TBD" : "Rs. " + ride.amount;
             });
 
-            setCurrentRides((prevRides: any) => [...prevRides, ...ridesData]);
+            setCurrentRides((prevRides: any) => ridesData);
             // alert(currentRides);
         } catch (error) {
             console.error('Error fetching current rides:', error);
@@ -108,6 +110,7 @@ const DriverRides = () => {
             const data = response.data;
             if (data.status === 200) {
                 message.success('Ride Completed.');
+                sessionStorage.setItem("inRide", "0");
                 fetchCurrentRides();
             }
             else {
@@ -157,14 +160,14 @@ const DriverRides = () => {
             key: 'driver',
         },
         {
-            title: 'Vehicle',
-            dataIndex: 'vehicle',
-            key: 'vehicle',
+            title: 'Ride Type',
+            dataIndex: 'vehicleType',
+            key: 'vehicleType',
         },
         {
             title: 'Vehicle Number',
-            dataIndex: 'vehicleNumber',
-            key: 'vehicleNumber',
+            dataIndex: 'vehicleNo',
+            key: 'vehicleNo',
         },
         {
             title: 'Amount',
@@ -181,19 +184,20 @@ const DriverRides = () => {
             dataIndex: 'action',
             key: 'action',
             render: (_: any, record: any) => {
-                if (record.status === 'Driver Connected') {
+                if (record.status === "Driver Connected") {
                     return (
                         <Button type="primary" onClick={() => handleStartRide(record)}>
                             Start Ride
                         </Button>
                     );
-                } else if (record.status === 'In Ride') {
+                } else if (record.status === "In Ride") {
                     return (
                         <Button type="primary" onClick={() => handleCompleteRide(record)}>
                             Complete Ride
                         </Button>
                     );
                 }
+                console.log("dfsfsdf" + record.status)
                 return null;
             },
         },
@@ -204,7 +208,7 @@ const DriverRides = () => {
             {loading ? (
                 <div>Driver Loading...</div>
             ) : currentRides.length > 0 ? (
-                <Table dataSource={currentRides} columns={columns}/>
+                <Table dataSource={currentRides} columns={columns} rowKey={(record) => record.id}/>
             ) : (
                 <div>No driver rides currently.</div>
             )}

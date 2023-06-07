@@ -26,7 +26,7 @@ const DriverHomePage: React.FC = () => {
 
     useEffect( () => {
         checkRide();
-    })
+    },[])
 
     const fetchRideRequests = async () => {
         // setLoading(true);
@@ -40,13 +40,13 @@ const DriverHomePage: React.FC = () => {
             const ridesData = response.data;
 
             await ridesData.forEach((ride: any) => {
-                ride.status = rideStatusLabels[ride.rideStatus] || 'Unknown';
-                ride.picupLocation = ride.pickupLocationLatitude + " , " + ride.pickupLocationLongitude;
+                ride.status = rideStatusLabels[ride.status] || 'Unknown';
+                ride.pickupLocation = ride.pickupLocationLatitude + " , " + ride.pickupLocationLongitude;
                 ride.destinationLocation = ride.destinationLocationLatitude + " , " + ride.destinationLocationLongitude;
-                ride.amount = ride.amount === null ? "TBD" : ride.amount;
+                ride.amount = ride.amount === null ? "TBD" : "Rs. " + ride.amount;
             });
 
-            setRideRequests((prevRides: any) => [...prevRides, ...ridesData]);
+            setRideRequests((prevRides: any) => ridesData);
             // alert(currentRides);
         } catch (error) {
             console.error('Error fetching current rides:', error);
@@ -74,12 +74,14 @@ const DriverHomePage: React.FC = () => {
             const data = response.data;
             if (data.status === 1) {
                 message.warning(data.message);
+                console.log(data.message)
                 sessionStorage.setItem("inRide",'1');
                 navigate("/dashboard/current-rides");
             }
             else {
                 sessionStorage.setItem("inRide",'0');
-                message.info(data.message);
+                // message.info(data.message);
+                console.log(data.message)
             }
             setLoading(false);
         } catch (error) {
@@ -100,7 +102,7 @@ const DriverHomePage: React.FC = () => {
             const data = response.data;
             if (data.status === 200) {
                 message.success('Ride Accepted');
-                fetchRideRequests();
+                navigate("/dashboard/current-rides")
             }
             else {
                 message.error(data.message);
@@ -180,21 +182,6 @@ const DriverHomePage: React.FC = () => {
             title: 'Destination',
             dataIndex: 'destinationLocation',
             key: 'destinationLocation',
-        },
-        {
-            title: 'Driver',
-            dataIndex: 'driver',
-            key: 'driver',
-        },
-        {
-            title: 'Vehicle',
-            dataIndex: 'vehicle',
-            key: 'vehicle',
-        },
-        {
-            title: 'Vehicle Number',
-            dataIndex: 'vehicleNumber',
-            key: 'vehicleNumber',
         },
         {
             title: 'Amount',

@@ -85,10 +85,13 @@ const PassengerHomePage: React.FC = () => {
             const data = response.data;
             if (data.status === 1) {
                 message.warning(data.message);
+                console.log(data.message)
                 navigate("/dashboard/current-rides");
             }
             else {
-                message.info(data.message);
+                // message.info(data.message);
+                console.log(data.message)
+
             }
             setLoading(false);
         } catch (error) {
@@ -118,10 +121,24 @@ const PassengerHomePage: React.FC = () => {
 
     const handleRequestRide = async (values: any) => {
 
+        // const vehicleType = { vehicleTypeId: values.vehicleType };
+        // values.vehicleType = vehicleType;
+
+        // const vehicleType = vehicleTypes.find(
+        //     (type: any) => type.vehicleTypeId === values.vehicleType
+        // );
+        //
+        // values.vehicleType = vehicleType;
+
         setReqLoading(true);
         try {
-            const response = await axios.post('http://localhost:8080/ride/request', values);
-            if (response.data.statusCode == 200) {
+            const token = sessionStorage.getItem('accessToken');
+            const response = await axios.post('http://localhost:8080/ride/request', values,{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (response.data.status == 200) {
                 message.success('Ride requested successfully!');
                 navigate("/dashboard/current-rides");
             } else {

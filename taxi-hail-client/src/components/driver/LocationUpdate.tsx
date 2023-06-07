@@ -33,7 +33,7 @@ export const LocationUpdate = () => {
                 })
                     .then(response => {
                         sessionStorage.setItem("vehicleId", response.data.vehicleId)
-                        sessionStorage.setItem("vehicleTypeId", response.data.vehicleId)
+                        sessionStorage.setItem("vehicleTypeId", response.data.vehicleType.vehicleTypeId)
                         setVehicleId(response.data.vehicleId);
                         setVehicleId(response.data.vehicleTypeId);
                         console.log('Request sent successfully');
@@ -57,7 +57,7 @@ export const LocationUpdate = () => {
                     vehicle: sessionStorage.getItem("vehicleId"),
                     vehicleType: sessionStorage.getItem("vehicleTypeId"),
                     location: `${generateRandomLatitude()},${generateRandomLongitude()}`,
-                    inRide: sessionStorage.getItem("ride") ? 1 : 0,
+                    inRide: sessionStorage.getItem("inRide"),
                     ride: sessionStorage.getItem("ride"),
                     status: 1,
                     createdAt: moment(Date.now()).format('YYYY-MM-DDTHH:mm:ss[Z]')

@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import axios from "axios/index";
+import axios from "axios";
 import {Button, message, Modal, Table} from "antd";
+import {UUID} from "crypto";
 
 const DriverHomePage: React.FC = () => {
 
@@ -22,6 +23,10 @@ const DriverHomePage: React.FC = () => {
         3: 'In Ride',
         4: 'Completed',
     };
+
+    useEffect( () => {
+        checkRide();
+    })
 
     const fetchRideRequests = async () => {
         // setLoading(true);
@@ -58,12 +63,62 @@ const DriverHomePage: React.FC = () => {
         return () => clearInterval(interval);
     }, []);
 
+    const checkRide = async () => {
+        try {
+            const token = sessionStorage.getItem('accessToken');
+            const response = await axios.get('http://localhost:8080/ride/check_ride', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const data = response.data;
+            if (data.status === 1) {
+                message.warning(data.message);
+                sessionStorage.setItem("inRide",'1');
+                navigate("/dashboard/current-rides");
+            }
+            else {
+                sessionStorage.setItem("inRide",'0');
+                message.info(data.message);
+            }
+            setLoading(false);
+        } catch (error) {
+            setLoading(false);
+            alert(error);
+            console.error(error);
+        }
+    }
+
+    const acceptRide = async (rideId: UUID) => {
+        try {
+            const token = sessionStorage.getItem('accessToken');
+            const response = await axios.get(`http://localhost:8080/ride/accept_ride/${rideId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const data = response.data;
+            if (data.status === 200) {
+                message.success('Ride Accepted');
+                fetchRideRequests();
+            }
+            else {
+                message.error(data.message);
+            }
+            setLoading(false);
+        } catch (error) {
+            setLoading(false);
+            alert(error);
+            console.error(error);
+        }
+    };
+
     const handleAccept = (record: any) => {
         Modal.confirm({
             title: 'Accept Ride',
             content: 'Are you sure you want to accept this ride?',
-            onOk: () => {
-                // Call a function with the row key
+            onOk: async () => {
+                await acceptRide(record.rideId)
                 console.log('Accepting ride:', record.key);
             },
             onCancel: () => {
@@ -72,12 +127,36 @@ const DriverHomePage: React.FC = () => {
         });
     };
 
+    const rejectRide = async (rideId: UUID) => {
+        try {
+            const token = sessionStorage.getItem('accessToken');
+            const response = await axios.get(`http://localhost:8080/ride/reject_ride/${rideId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const data = response.data;
+            if (data.status === 200) {
+                message.success('Ride Rejected');
+                fetchRideRequests();
+            }
+            else {
+                message.error(data.message);
+            }
+            setLoading(false);
+        } catch (error) {
+            setLoading(false);
+            alert(error);
+            console.error(error);
+        }
+    };
+
     const handleReject = (record: any) => {
         Modal.confirm({
             title: 'Reject Ride',
             content: 'Are you sure you want to reject this ride?',
-            onOk: () => {
-                // Call a function with the row key
+            onOk: async () => {
+                await rejectRide(record.rideId);
                 console.log('Rejecting ride:', record.key);
             },
             onCancel: () => {

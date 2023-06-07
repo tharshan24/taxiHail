@@ -11,6 +11,7 @@ import com.taxi.taxihailcore.response.CommonResponse;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
@@ -190,5 +191,85 @@ public class RideService {
             rideViewDTOList.add(rideViewDTO);
         }
         return rideViewDTOList;
+    }
+
+    @Transactional
+    public CommonResponse cancelRide(Ride ride) {
+        ride.setStatus(0); // Update the ride status to 0
+        rideRepository.save(ride);
+
+        List<RideDriver> rideDrivers = rideDriverRepository.findRideDriverByRide(ride);
+        for (RideDriver rideDriver : rideDrivers) {
+            rideDriver.setStatus(3); // Update the ride driver status to 3
+        }
+        rideDriverRepository.saveAll(rideDrivers);
+
+        return CommonResponse.builder()
+                .status(200)
+                .message("Ride Cancelled Successfully")
+                .build();
+    }
+
+    @Transactional
+    public CommonResponse changeRide(Ride ride, int status) {
+        ride.setStatus(status);
+        rideRepository.save(ride);
+
+        if (status == 4) {
+            Payment payment = paymentRepository.findByRide(ride);
+            payment.setStatus(1);
+            paymentRepository.save(payment);
+        }
+
+        return CommonResponse.builder()
+                .status(200)
+                .message("Ride Cancelled Successfully")
+                .build();
+    }
+
+    @Transactional
+    public CommonResponse acceptRide(Ride ride, UUID userId) {
+        ride.setStatus(2);
+        rideRepository.save(ride);
+
+        List<RideDriver> rideDrivers = rideDriverRepository.findRideDriverByRide(ride);
+        for (RideDriver rideDriver : rideDrivers) {
+            if (rideDriver.getDriver().getUserId().equals(userId)) {
+                rideDriver.setStatus(2); // Update the ride driver status to 2 if driverId matches
+            } else {
+                rideDriver.setStatus(4); // Update the ride driver status to 4 for other drivers
+            }
+        }
+        rideDriverRepository.saveAll(rideDrivers);
+
+        return CommonResponse.builder()
+                .status(200)
+                .message("Ride Cancelled Successfully")
+                .build();
+    }
+
+    @Transactional
+    public CommonResponse rejectRide(Ride ride, UUID userId) {
+
+        boolean pendingFlag = false;
+        List<RideDriver> rideDrivers = rideDriverRepository.findRideDriverByRide(ride);
+        for (RideDriver rideDriver : rideDrivers) {
+            if (rideDriver.getDriver().getUserId().equals(userId)) {
+                rideDriver.setStatus(0); // Update the ride driver status to 2 if driverId matches
+            }
+            if(rideDriver.getStatus() == 1) {
+                pendingFlag = true;
+            }
+        }
+        rideDriverRepository.saveAll(rideDrivers);
+
+        if (!pendingFlag) {
+            ride.setStatus(5);
+        }
+
+        return CommonResponse.builder()
+                .status(200)
+                .message("Ride Cancelled Successfully")
+                .build();
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -17,4 +18,5 @@ public interface RideDriverRepository extends JpaRepository<RideDriver, UUID> {
     @Query("UPDATE Ride r SET r.status = 0 WHERE r.rideId = :rideId")
     void softDelete(@Param("rideId") UUID rideId);
 
+    List<RideDriver> findRideDriverByRide(Ride ride);
 }

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Button, message, Modal, Table} from 'antd';
 import axios from 'axios';
 import {useNavigate} from "react-router-dom";
+import {UUID} from "crypto";
 
 const DriverRides = () => {
 
@@ -58,26 +59,74 @@ const DriverRides = () => {
         return () => clearInterval(interval);
     }, []);
 
+    const startRide = async (rideId: UUID) => {
+        try {
+            const token = sessionStorage.getItem('accessToken');
+            const response = await axios.get(`http://localhost:8080/ride/change_ride/${rideId}/3`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const data = response.data;
+            if (data.status === 200) {
+                message.success('Ride Started');
+                fetchCurrentRides();
+            }
+            else {
+                message.error(data.message);
+            }
+            setLoading(false);
+        } catch (error) {
+            setLoading(false);
+            alert(error);
+            console.error(error);
+        }
+    };
+
     const handleStartRide = (record: any) => {
         Modal.confirm({
             title: 'Start Ride',
             content: 'Are you sure you want to start this ride?',
-            onOk: () => {
-                // Call a function with the row key
+            onOk: async () => {
+                await startRide(record.rideId)
                 console.log('Starting ride:', record.key);
             },
             onCancel: () => {
-                console.log('Start ride canceled');
+                console.log('Ride not started');
             },
         });
+    };
+
+    const completeRide = async (rideId: UUID) => {
+        try {
+            const token = sessionStorage.getItem('accessToken');
+            const response = await axios.get(`http://localhost:8080/ride/change_ride/${rideId}/4`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const data = response.data;
+            if (data.status === 200) {
+                message.success('Ride Completed.');
+                fetchCurrentRides();
+            }
+            else {
+                message.error(data.message);
+            }
+            setLoading(false);
+        } catch (error) {
+            setLoading(false);
+            alert(error);
+            console.error(error);
+        }
     };
 
     const handleCompleteRide = (record: any) => {
         Modal.confirm({
             title: 'Complete Ride',
             content: 'Are you sure you want to complete this ride?',
-            onOk: () => {
-                // Call a function with the row key
+            onOk: async () => {
+                await completeRide(record.rideId)
                 console.log('Completing ride:', record.key);
             },
             onCancel: () => {

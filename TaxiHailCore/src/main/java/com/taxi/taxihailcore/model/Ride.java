@@ -47,7 +47,7 @@ public class Ride {
     private User driver;
 
     @Column(name = "status", length = 1, nullable = false)
-    private int status; // 0: cancelled, 1: pending, 2: driver_connected, 3: in_ride, 4: completed
+    private int status; // 0: cancelled, 1: pending, 2: driver_connected, 3: in_ride, 4: completed, 5: rejected
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false, nullable = false)

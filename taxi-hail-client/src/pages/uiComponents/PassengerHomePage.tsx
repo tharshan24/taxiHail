@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react';
-import {Form, Select, Button, Spin, message} from 'antd';
+import React, {useEffect, useState} from 'react';
+import {Button, Form, message, Select, Spin} from 'antd';
 import axios from 'axios';
-import {Navigate, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const {Option} = Select;
 
@@ -49,44 +49,57 @@ const PassengerHomePage: React.FC = () => {
 
     useEffect(() => {
         checkRide();
-    })
-
-    useEffect(() => {
         fetchVehicleTypes();
     }, []);
 
-    useEffect(() => {
-        const handlePageLeave = (event: BeforeUnloadEvent) => {
-            if (reqLoading) {
-                event.preventDefault();
-                const confirmed = window.confirm('Are you sure you want to leave?');
-                if (confirmed) {
-                    handleCancelRequest();
-                    message.info('Ride request cancelled.');
-                    navigate('/'); // Replace with the appropriate path for navigation
-                } else {
-                    event.returnValue = '';
-                }
-            }
-        };
-
-        window.addEventListener('beforeunload', handlePageLeave);
-
-        return () => {
-            window.removeEventListener('beforeunload', handlePageLeave);
-        };
-    }, [reqLoading]);
+    // useEffect(() => {
+    //     const handlePageLeave = (event: BeforeUnloadEvent) => {
+    //         if (reqLoading) {
+    //             event.preventDefault();
+    //             const confirmed = window.confirm('Are you sure you want to leave?');
+    //             if (confirmed) {
+    //                 handleCancelRequest();
+    //                 message.info('Ride request cancelled.');
+    //                 navigate('/'); // Replace with the appropriate path for navigation
+    //             } else {
+    //                 event.returnValue = '';
+    //             }
+    //         }
+    //     };
+    //
+    //     window.addEventListener('beforeunload', handlePageLeave);
+    //
+    //     return () => {
+    //         window.removeEventListener('beforeunload', handlePageLeave);
+    //     };
+    // }, [reqLoading]);
 
     const checkRide = async () => {
-
+        try {
+            const token = sessionStorage.getItem('accessToken');
+            const response = await axios.get('http://localhost:8080/ride/check_ride', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const data = response.data;
+            if (data.status === 1) {
+                message.warning(data.message);
+                navigate("/dashboard/current-rides");
+            }
+            else {
+                message.info(data.message);
+            }
+            setLoading(false);
+        } catch (error) {
+            setLoading(false);
+            alert(error);
+            console.error(error);
+        }
     }
 
     const fetchVehicleTypes = async () => {
         try {
-            console.log(sessionStorage.getItem("role"))
-            if (sessionStorage.getItem("role") !== "PASSENGER") {
-                navigate("/");
-            }
             const token = sessionStorage.getItem('accessToken');
             const response = await axios.get('http://localhost:8080/vehicle_type/get_vehicle_types', {
                 headers: {
@@ -124,10 +137,29 @@ const PassengerHomePage: React.FC = () => {
         }
     };
 
-    const handleCancelRequest = () => {
-        form.resetFields();
-        message.info('Ride request cancelled.');
-    };
+    // const handleCancelRequest = () => {
+    //     try {
+    //         const token = sessionStorage.getItem('accessToken');
+    //         const response = await axios.get('http://localhost:8080/ride/cancel_ride', {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`
+    //             }
+    //         });
+    //         const data = response.data;
+    //         if (data.status === 200) {
+    //             form.resetFields();
+    //             message.info('Ride request cancelled.');
+    //         }
+    //         else {
+    //             message.error(data.message);
+    //         }
+    //         setLoading(false);
+    //     } catch (error) {
+    //         setLoading(false);
+    //         alert(error);
+    //         console.error(error);
+    //     }
+    // };
 
     return (
         <div className="request-ride-container">
@@ -166,7 +198,7 @@ const PassengerHomePage: React.FC = () => {
                     {reqLoading ? (
                         <div className="spin-container">
                             <Spin/>
-                            <Button onClick={handleCancelRequest}>Cancel</Button>
+                            {/*<Button onClick={handleCancelRequest}>Cancel</Button>*/}
                         </div>
                     ) : (
                         <Button type="primary" htmlType="submit">Request Ride</Button>

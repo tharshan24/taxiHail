@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {message, Table} from 'antd';
+import {Button, message, Modal, Table} from 'antd';
 import axios from 'axios';
 import {useNavigate} from "react-router-dom";
+import {UUID} from "crypto";
 
 const PassengerRides = () => {
 
@@ -58,6 +59,44 @@ const PassengerRides = () => {
         return () => clearInterval(interval);
     }, []);
 
+    const cancelRequest = async (rideId: UUID) => {
+        try {
+            const token = sessionStorage.getItem('accessToken');
+            const response = await axios.get(`http://localhost:8080/ride/cancel_ride/${rideId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const data = response.data;
+            if (data.status === 200) {
+                message.success('Ride request cancelled.');
+                fetchCurrentRides();
+            }
+            else {
+                message.error(data.message);
+            }
+            setLoading(false);
+        } catch (error) {
+            setLoading(false);
+            alert(error);
+            console.error(error);
+        }
+    };
+
+    const handleCancelRequest = (record: any) => {
+        Modal.confirm({
+            title: 'Cancel Ride',
+            content: 'Are you sure you want to cancel this ride?',
+            onOk: async () => {
+                await cancelRequest(record.rideId)
+                console.log('Cancelling ride:', record.key);
+            },
+            onCancel: () => {
+                console.log('Ride not cancelled');
+            },
+        });
+    };
+
     const columns = [
         {
             title: 'Ride ID',
@@ -98,6 +137,18 @@ const PassengerRides = () => {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
+        },
+        {
+            title: 'Action',
+            dataIndex: 'action',
+            key: 'action',
+            render: (_: any, record: any) => {
+                return (
+                    <Button type="primary" onClick={() => handleCancelRequest(record)}>
+                        Cancel Ride
+                    </Button>
+                );
+            },
         },
     ];
 

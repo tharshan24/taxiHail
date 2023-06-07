@@ -11,6 +11,8 @@ import com.taxi.taxihailcore.response.CommonResponse;
 import com.taxi.taxihailcore.service.RideService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -137,7 +139,15 @@ public class RideController {
 
         UUID userId = UUID.fromString((String) httpServletRequest.getAttribute("userId"));
 
-        Optional<Ride> optionalRide = rideRepository.findRideByRideId(rideId);
+        Optional<Ride> optionalRide = rideRepository.findPendingRideByRideId(rideId);
+
+        if(optionalRide.isEmpty() || !optionalRide.isPresent()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(CommonResponse.builder()
+                            .status(0)
+                            .message("Ride Missed")
+                            .build());
+        }
 
         return ResponseEntity.ok(rideService.acceptRide(optionalRide.get(), userId));
     }
@@ -149,7 +159,15 @@ public class RideController {
 
         UUID userId = UUID.fromString((String) httpServletRequest.getAttribute("userId"));
 
-        Optional<Ride> optionalRide = rideRepository.findRideByRideId(rideId);
+        Optional<Ride> optionalRide = rideRepository.findPendingRideByRideId(rideId);
+
+        if(optionalRide.isEmpty() || !optionalRide.isPresent()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(CommonResponse.builder()
+                            .status(0)
+                            .message("Ride Missed")
+                            .build());
+        }
 
         return ResponseEntity.ok(rideService.rejectRide(optionalRide.get(), userId));
     }

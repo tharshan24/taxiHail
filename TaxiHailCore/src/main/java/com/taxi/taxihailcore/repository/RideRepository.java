@@ -28,4 +28,7 @@ public interface RideRepository extends JpaRepository<Ride, UUID> {
 
     @Query("SELECT rr FROM Ride rr WHERE rr.rideId = :rideId")
     Optional<Ride> findRideByRideId(UUID rideId);
+
+    @Query("SELECT rr FROM Ride rr WHERE rr.rideId = :rideId AND rr.status = 1")
+    Optional<Ride> findPendingRideByRideId(UUID rideId);
 }

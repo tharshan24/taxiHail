@@ -102,6 +102,7 @@ const DriverHomePage: React.FC = () => {
             const data = response.data;
             if (data.status === 200) {
                 message.success('Ride Accepted');
+                sessionStorage.setItem("ride", rideId)
                 navigate("/dashboard/current-rides")
             }
             else {

@@ -45,6 +45,10 @@ const DriverRides = () => {
             });
 
             setCurrentRides((prevRides: any) => ridesData);
+            if(currentRides.length === 0) {
+                sessionStorage.setItem("inRide", "0");
+                sessionStorage.setItem("ride", "");
+            }
             // alert(currentRides);
         } catch (error) {
             console.error('Error fetching current rides:', error);
@@ -110,6 +114,7 @@ const DriverRides = () => {
             const data = response.data;
             if (data.status === 200) {
                 message.success('Ride Completed.');
+                sessionStorage.setItem("ride",'')
                 sessionStorage.setItem("inRide", "0");
                 fetchCurrentRides();
             }
@@ -197,7 +202,6 @@ const DriverRides = () => {
                         </Button>
                     );
                 }
-                console.log("dfsfsdf" + record.status)
                 return null;
             },
         },

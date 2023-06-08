@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Avatar, Dropdown, Menu} from 'antd';
+import {Avatar, Dropdown, Menu, message} from 'antd';
 import {UserOutlined, LogoutOutlined} from '@ant-design/icons';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
@@ -18,11 +18,11 @@ const AppNavbar: React.FC = () => {
                 // Handle the response from the server
                 if (response.data.status === 200) {
                     sessionStorage.clear();
-                    alert(response.data.message);
+                    message.success(response.data.message);
                     navigate('/auth/login');
                 } else {
                     sessionStorage.clear();
-                    alert(response.data.message)
+                    message.error(response.data.message)
                     setTimeout(() => {
                         navigate('/auth/login');
                     }, 2000)
@@ -30,7 +30,7 @@ const AppNavbar: React.FC = () => {
             })
             .catch(error => {
                 sessionStorage.clear();
-                alert(error);
+                message.error(error);
                 setTimeout(() => {
                     navigate('/auth/login');
                 }, 2000)

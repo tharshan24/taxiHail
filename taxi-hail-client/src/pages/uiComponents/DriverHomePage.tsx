@@ -112,9 +112,9 @@ const DriverHomePage: React.FC = () => {
                 message.error(data.message);
             }
             setLoading(false);
-        } catch (error) {
+        } catch (error:any) {
             setLoading(false);
-            alert(error);
+            alert(error.response.data.message);
             console.error(error);
         }
     };

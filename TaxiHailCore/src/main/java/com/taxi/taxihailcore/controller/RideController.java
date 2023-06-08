@@ -108,6 +108,13 @@ public class RideController {
                     .build());
         }
 
+        if (ride.getStatus() != 1 && ride.getStatus() !=2) {
+            return ResponseEntity.ok(CommonResponse.builder()
+                    .message("Operation not Possible")
+                    .status(0)
+                    .build());
+        }
+
         return ResponseEntity.ok(rideService.cancelRide(ride));
     }
 

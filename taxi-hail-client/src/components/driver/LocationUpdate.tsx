@@ -22,7 +22,6 @@ export const LocationUpdate = () => {
 
     useEffect(() => {
 
-
         if ((!vehicleId || vehicleId === "undefined") && sessionStorage.getItem('role') === "DRIVER") {
             try {
                 const token = sessionStorage.getItem('accessToken');
@@ -35,7 +34,7 @@ export const LocationUpdate = () => {
                         sessionStorage.setItem("vehicleId", response.data.vehicleId)
                         sessionStorage.setItem("vehicleTypeId", response.data.vehicleType.vehicleTypeId)
                         setVehicleId(response.data.vehicleId);
-                        setVehicleId(response.data.vehicleTypeId);
+                        setVehicleTypeId(response.data.vehicleTypeId);
                         console.log('Request sent successfully');
                     })
                     .catch(error => {
@@ -50,8 +49,8 @@ export const LocationUpdate = () => {
             }
         }
 
-        if (vehicleId && sessionStorage.getItem("vehicleId")) {
-            const interval = setInterval(() => {
+        const interval = setInterval(() => {
+            if (vehicleId && sessionStorage.getItem("vehicleId")) {
                 const data = {
                     driver: sessionStorage.getItem("userId"),
                     vehicle: sessionStorage.getItem("vehicleId"),
@@ -77,13 +76,13 @@ export const LocationUpdate = () => {
                         // Handle error if needed
                         console.error('Error sending request:', error);
                     });
-            }, 5000); // Set the interval duration (in milliseconds) as per your requirement
+            }
+        }, 5000); // Set the interval duration (in milliseconds) as per your requirement
 
             return () => {
                 clearInterval(interval); // Cleanup interval on component unmount
             };
-        }
-    }, []);
+    }, [vehicleId]);
 
     return null;
 }

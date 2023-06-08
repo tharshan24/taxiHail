@@ -56,7 +56,8 @@ const SignUpForm: React.FC = () => {
             })
             .then(() => {
                 console.log(sessionStorage.getItem("role"));
-                navigate('/dashboard/home');
+                // navigate('/dashboard/home');
+                window.location.href = window.location.origin + "/";
             })
             .catch(error => {
                 sessionStorage.clear();

@@ -49,17 +49,17 @@ const UpdatePasswordForm: React.FC = () => {
             .then(response => {
                 // Handle the response from the server
                 if (response.status === 200) {
-                    message.success(response.data);
+                    alert(response.data);
                     navigate('/dashboard/update-password');
                 } else {
                     // sessionStorage.clear();
-                    message.error(response.data)
+                    alert(response.data)
                     console.log(response)
                 }
             })
             .catch(error => {
                 // sessionStorage.clear();
-                message.error(error.response);
+                alert(error.response.data);
                 console.log(error.response)
             });
     };

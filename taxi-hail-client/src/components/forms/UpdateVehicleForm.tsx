@@ -52,16 +52,16 @@ export const UpdateVehicleForm: React.FC<any> = (vehicleData: any) => {
             })
             .then(response => {
                 if (response.data.status === 200) {
-                    message.success(response.data.message);
+                    alert(response.data.message);
                     navigate("/dashboard/home");
                     // window.location.reload();
                 } else {
-                    message.error(response.data.message);
+                    alert(response.data.message);
                 }
             })
             .catch(error => {
-                sessionStorage.clear();
-                message.error(error);
+                // sessionStorage.clear();
+                alert(error.response.data.message);
             });
     };
 

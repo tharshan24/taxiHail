@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class VehicleExceptionHandler {
 
     @ExceptionHandler(VehicleException.class)
-    public ResponseEntity<String> handleVehicleException(UserRegistrationException ex) {
+    public ResponseEntity<String> handleVehicleException(VehicleException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }
